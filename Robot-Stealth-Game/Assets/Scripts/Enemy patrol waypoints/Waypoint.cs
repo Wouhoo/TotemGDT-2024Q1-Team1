@@ -8,7 +8,6 @@ This one has no fancy behavior, just a basic waypoint
 
 public class Waypoint : MonoBehaviour
 {
-    //might need this later for some reason
     //Not a fan of the fact that this is the type of a patrolling enemy, is confusing
     public EnemyAI_Patrol assignedEnemy;
 
