@@ -23,7 +23,7 @@ public class EnemyAI : MonoBehaviour
     protected void At(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
     protected void Any(IState to, Func<bool> condition) => stateMachine.AddAnyTransition(to, condition);
 
-    private void Update()
+    protected virtual void Update()
     {
         if (Time.time >= tickDeadline)
         {

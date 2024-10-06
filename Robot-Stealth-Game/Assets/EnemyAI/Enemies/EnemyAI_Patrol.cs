@@ -6,17 +6,20 @@ public class EnemyAI_Patrol : EnemyAI
 {
     [Header("Patrol")]
     public float patrolSpeed;
-    public Transform[] waypoints;
+    //public Transform[] waypoints;
+    public Waypoint[] waypoints;
 
     public Color gizmoColor;
     //workaround, unity is a bit dumb with uninitialized colors
     private bool isColorAssigned = false;
 
+    private float pauseCounter = 0.0f;
+
     private void Start()
     {
 
         // STATES
-        var patrol = new EnemyState_Patrol(navMeshAgent, waypoints, patrolSpeed);
+        var patrol = new EnemyState_Patrol(navMeshAgent, waypoints, patrolSpeed, this);
 
         // TRANSITIONS
 
@@ -26,6 +29,39 @@ public class EnemyAI_Patrol : EnemyAI
         // CONDITIONS
     }
 
+
+    public void PauseForSeconds(float duration)
+    {
+        Debug.Log("Pause waypoint: " + duration + " seconds");
+        if(duration > 0.0f)
+        {
+            navMeshAgent.isStopped = true;
+            pauseCounter = duration;
+        }
+
+    }
+
+    protected override void Update()
+    {
+        //don't override base function
+        base.Update();
+
+        //update the pausecounter in case we are at a pause waypoint
+        //TODO: would be nicer if handled in the waypoint itself maybe?
+        //prevent underflow in the 1/100000 chance it might happen
+        if(pauseCounter >= 0.0f)
+        {
+            pauseCounter -= Time.deltaTime;
+            if(pauseCounter < 0.0f)
+            {
+                navMeshAgent.isStopped = false;
+            }
+        }
+    }
+
+
+
+    //draw lines in the editor for level design
     void OnDrawGizmos()
     {
         if(!isColorAssigned)

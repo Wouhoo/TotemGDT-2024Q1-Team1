@@ -12,7 +12,8 @@ public class Waypoint : MonoBehaviour
     //Not a fan of the fact that this is the type of a patrolling enemy, is confusing
     public EnemyAI_Patrol assignedEnemy;
 
-    void Start()
+    //upon arriving at this waypoint
+    public virtual void OnReachWaypoint()
     {
         //nothing
     }
@@ -28,8 +29,8 @@ public class Waypoint : MonoBehaviour
         }
     }
 
-    //nothing
-    void Update()
+    //upon arriving at next waypoint
+    public virtual void OnExitWaypoint()
     {
         
     }
