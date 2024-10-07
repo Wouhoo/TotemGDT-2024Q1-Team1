@@ -9,7 +9,6 @@ public class DetectablesManager : MonoBehaviour
 {
     public static DetectablesManager Instance { get; private set; } = null;
     public HashSet<GameObject> AllTargets { get; private set; } = new HashSet<GameObject>();
-    public float tickLength = 0.2f;
 
     void Awake()
     {

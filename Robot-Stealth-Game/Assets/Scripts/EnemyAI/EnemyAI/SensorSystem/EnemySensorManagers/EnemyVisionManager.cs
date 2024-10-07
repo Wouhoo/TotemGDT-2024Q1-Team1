@@ -9,7 +9,7 @@ using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class VisionManager
+public class EnemyVisionManager
 {
     public Transform targetTransform;
     public Vector3 targetVector;
@@ -21,14 +21,14 @@ public class VisionManager
     private readonly int canTarget; // ie. can attack body
     private readonly int preference; // ie. prefer to attack nearest
 
-    public VisionManager(Transform location, int canTarget = 2, int preference = 0) // 0: body, 1: arms, 2: (can:both) (pref:near)
+    public EnemyVisionManager(Transform location, int canTarget = 2, int preference = 0) // 0: body, 1: arms, 2: (can:both) (pref:near)
     {
         this.location = location;
         this.canTarget = canTarget;
         this.preference = preference;
     }
 
-    public void VisionListenersRefresh(HashSet<VisionSensor> newSensors)
+    public void ListenersRefresh(HashSet<VisionSensor> newSensors)
     {
         if (newSensors.SetEquals(visionSensors)) // Don't run if not needed
             return;
@@ -38,8 +38,11 @@ public class VisionManager
         newListeners.ExceptWith(visionSensors);
         foreach (VisionSensor newSensor in newListeners)
         {
-            visionSensors.Add(newSensor); // Already before to avoid OnDestroy missing listeners halfway through
-            newSensor.OnVisionChange += VisionUpdate;
+            if (newSensor != null)
+            {
+                visionSensors.Add(newSensor); // Add before registering!
+                newSensor.RegisterEnemy(this);
+            }
         }
 
         // We now unsubscribe from the old sensors
@@ -47,15 +50,13 @@ public class VisionManager
         oldListeners.ExceptWith(newSensors);
         foreach (VisionSensor oldSensor in oldListeners)
         {
-            oldSensor.OnVisionChange -= VisionUpdate;
+            if (oldSensor != null)
+                oldSensor.DeregisterEnemy(this); // Deregister before removing!
+            visionSensors.Remove(oldSensor);
         }
-
-        // We now update our set of listened to sensors (AFTER UNSUBSCRIBING)
-        visionSensors = newSensors;
-        Debug.Log(visionSensors);
     }
 
-    private void VisionUpdate()
+    public void VisionUpdate()
     {
         Debug.Log("VisionUpdate");
         HashSet<GameObject> oldTargets = new HashSet<GameObject>(visionTargets);
@@ -167,10 +168,11 @@ public class VisionManager
 
     void OnDestroy()
     {
-        // Unsubscribe from the sensors' events to prevent memory leaks
+        // Unsubscribe from the sensors to prevent memory leaks
         foreach (VisionSensor sensor in visionSensors)
         {
-            sensor.OnVisionChange -= VisionUpdate;
+            if (sensor != null)
+                sensor.DeregisterEnemy(this);
         }
     }
 }

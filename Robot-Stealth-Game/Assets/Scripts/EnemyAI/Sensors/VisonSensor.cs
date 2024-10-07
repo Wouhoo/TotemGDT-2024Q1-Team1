@@ -7,14 +7,9 @@ using UnityEngine;
 public class VisionSensor : MonoBehaviour
 {
     [HideInInspector] public EnemyAI enemyAI;
-    public bool unicast = false;
-    public bool broadcast = false;
-    public event Action OnVisionChange;
-    public HashSet<GameObject> targets = new HashSet<GameObject>();
-    // eyeLocation => transform.position;
-    // eyeDirection => transform.forward;
-
-
+    public float tickSpeed = 0.2f;
+    [HideInInspector] public HashSet<GameObject> targets = new HashSet<GameObject>();
+    [HideInInspector] public HashSet<EnemyVisionManager> enemyManagers = new HashSet<EnemyVisionManager>();
     public float visionConeAngle = 60f;
     public float visionConeRange = 30f;
     public Color visionConeColour = new Color(1f, 0f, 0f, 0.25f);
@@ -22,22 +17,28 @@ public class VisionSensor : MonoBehaviour
     public float cosVisionConeAngle { get; private set; } = 0f;
 
     [SerializeField] LayerMask detectionMask = ~0;
-
+    private float tickDeadline;
     private void Awake()
     {
-        enemyAI = GetComponent<EnemyAI>();
+        // First let the sensor manager know this sensor exists
+        SensorManager.Instance.RegisterVisionSensor(gameObject);
+
         cosVisionConeAngle = Mathf.Cos(visionConeAngle * Mathf.Deg2Rad);
     }
 
-    public void Tick()
+    private void Update()
     {
-        HashSet<GameObject> newTargets = SensorUpdate(DetectablesManager.Instance.AllTargets);
-        if (!newTargets.SetEquals(targets)) // TODO: is this correct? (!=) on a hashset
+        if (Time.time >= tickDeadline)
         {
-            targets = newTargets;
-            Debug.Log("BROADCASTING");
-            if (broadcast) OnVisionChange?.Invoke();
-            // TODO: if (unicast) enemyAI.
+            tickDeadline = Time.time + tickSpeed;
+            HashSet<GameObject> newTargets = SensorUpdate(DetectablesManager.Instance.AllTargets);
+            if (!newTargets.SetEquals(targets))
+            {
+                targets = newTargets;
+                foreach (EnemyVisionManager enemy in enemyManagers)
+                    if (enemy != null)
+                        enemy.VisionUpdate();
+            }
         }
     }
 
@@ -78,15 +79,19 @@ public class VisionSensor : MonoBehaviour
         return false;
     }
 
-
-    // Make sure to clear all subscribers
-    private void OnDisable()
+    public void RegisterEnemy(EnemyVisionManager enemy)
     {
-        OnVisionChange = null;
+        enemyManagers.Add(enemy);
+    }
+
+    public void DeregisterEnemy(EnemyVisionManager enemy)
+    {
+        enemyManagers.Remove(enemy);
     }
 
     private void OnDestroy()
     {
-        OnVisionChange = null;
+        if (SensorManager.Instance != null)
+            SensorManager.Instance.DeregisterVisionSensor(gameObject);
     }
 }

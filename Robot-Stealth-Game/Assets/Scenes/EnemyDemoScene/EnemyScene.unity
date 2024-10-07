@@ -520,6 +520,7 @@ GameObject:
   m_Component:
   - component: {fileID: 556319047}
   - component: {fileID: 556319046}
+  - component: {fileID: 556319048}
   m_Layer: 0
   m_Name: EventManager
   m_TagString: Untagged
@@ -539,7 +540,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a5ecd4ba37ca57439028207c6b475ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickLength: 0.2
 --- !u!4 &556319047
 Transform:
   m_ObjectHideFlags: 0
@@ -555,6 +555,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &556319048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556319045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75b2c0f78af864e4988b587fb7994d45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &611623107
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1359,7 +1371,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a10935cf159ecbd4c9466694ae058917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickSpeed: 0.2
   target: {fileID: 1317888044}
   waitTime: 5
 --- !u!1001 &996129864
@@ -2389,14 +2400,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d261cf3600bea47459d0bf8d9841f222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickSpeed: 0.2
   patrolSpeed: 5
   waypoints:
   - {fileID: 1264034649}
   - {fileID: 261646164}
   - {fileID: 2014303296}
   - {fileID: 1067729665}
-  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
+  gizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!195 &1459202944
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2984,13 +2994,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d261cf3600bea47459d0bf8d9841f222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickSpeed: 0.2
   patrolSpeed: 5
   waypoints:
   - {fileID: 877503380}
   - {fileID: 1757208428}
   - {fileID: 2124435429}
-  gizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!195 &1794410875
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3196,8 +3205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyAI: {fileID: 0}
-  unicast: 0
-  broadcast: 1
+  tickSpeed: 0.2
   visionConeAngle: 60
   visionConeRange: 30
   visionConeColour: {r: 1, g: 0, b: 0, a: 0.25}
@@ -3216,7 +3224,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9441bbbe7224b9e4090298aae103b7d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickSpeed: 0.5
   localVisionSensor: {fileID: 0}
 --- !u!195 &1890163900
 NavMeshAgent:

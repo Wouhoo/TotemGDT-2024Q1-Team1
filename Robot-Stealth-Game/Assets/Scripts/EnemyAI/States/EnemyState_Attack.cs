@@ -5,13 +5,13 @@ using UnityEngine.AI;
 
 public class EnemyState_Attack : IState
 {
-    private readonly VisionManager visionManager;
+    private readonly EnemyVisionManager visionManager;
     private readonly NavMeshAgent navMeshAgent;
     private readonly float attackMovmentSpeed;
 
     private float initialSpeed;
 
-    public EnemyState_Attack(VisionManager visionManager, NavMeshAgent navMeshAgent)
+    public EnemyState_Attack(EnemyVisionManager visionManager, NavMeshAgent navMeshAgent)
     {
         this.visionManager = visionManager;
         this.navMeshAgent = navMeshAgent;

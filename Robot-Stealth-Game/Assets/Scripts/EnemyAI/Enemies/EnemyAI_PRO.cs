@@ -10,15 +10,15 @@ public class EnemyAI_PRO : EnemyAI
 {
     [HideInInspector] public VisionSensor localVisionSensor;
     public HashSet<VisionSensor> fixedVisionSensors = new HashSet<VisionSensor>();
-    private VisionManager visionManager;
+    private EnemyVisionManager visionManager;
 
     private void Start()
     {
         localVisionSensor = GetComponent<VisionSensor>();
-        visionManager = new VisionManager(transform, 2, 2);
+        visionManager = new EnemyVisionManager(transform, 2, 2);
         // TEMP:
         fixedVisionSensors.Add(localVisionSensor);
-        visionManager.VisionListenersRefresh(fixedVisionSensors);
+        visionManager.ListenersRefresh(fixedVisionSensors);
 
         // STATES
         var attack = new EnemyState_Attack(visionManager, navMeshAgent);
@@ -27,7 +27,6 @@ public class EnemyAI_PRO : EnemyAI
         // TRANSITIONS
         At(attack, idle, AttackDone());
         Any(attack, CanSee());
-
 
         // START STATE
         stateMachine.SetState(idle);
@@ -39,7 +38,6 @@ public class EnemyAI_PRO : EnemyAI
 
     protected override void Tick()
     {
-        localVisionSensor.Tick();
         UpdateSensors();
     }
 
