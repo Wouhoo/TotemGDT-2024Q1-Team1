@@ -33,7 +33,7 @@ public class EnemyAI_Patrol : EnemyAI
     public void PauseForSeconds(float duration)
     {
         Debug.Log("Pause waypoint: " + duration + " seconds");
-        if(duration > 0.0f)
+        if (duration > 0.0f)
         {
             navMeshAgent.isStopped = true;
             pauseCounter = duration;
@@ -41,18 +41,15 @@ public class EnemyAI_Patrol : EnemyAI
 
     }
 
-    protected override void Update()
+    protected override void Tick()
     {
-        //don't override base function
-        base.Update();
-
         //update the pausecounter in case we are at a pause waypoint
         //TODO: would be nicer if handled in the waypoint itself maybe?
         //prevent underflow in the 1/100000 chance it might happen
-        if(pauseCounter >= 0.0f)
+        if (pauseCounter >= 0.0f)
         {
             pauseCounter -= Time.deltaTime;
-            if(pauseCounter < 0.0f)
+            if (pauseCounter < 0.0f)
             {
                 navMeshAgent.isStopped = false;
             }
@@ -64,7 +61,7 @@ public class EnemyAI_Patrol : EnemyAI
     //draw lines in the editor for level design
     void OnDrawGizmos()
     {
-        if(!isColorAssigned)
+        if (!isColorAssigned)
         {
             isColorAssigned = true;
             //get a color to show in the editor

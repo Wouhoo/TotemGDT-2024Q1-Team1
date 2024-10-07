@@ -4,14 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// 
+///  DO NOT EDIT THIS SCRIPT
+///  
+/// </summary>
+
 [DisallowMultipleComponent]
 public class EnemyAI : MonoBehaviour
 {
     [HideInInspector] protected NavMeshAgent navMeshAgent;
     [HideInInspector] protected Animator animator;
-    public float tickSpeed = 0.2f;
-
     protected StateMachine stateMachine = new StateMachine();
+
+    private float tickSpeed = 0.2f;
     private float tickDeadline;
 
     private void Awake()
@@ -23,8 +29,10 @@ public class EnemyAI : MonoBehaviour
     protected void At(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
     protected void Any(IState to, Func<bool> condition) => stateMachine.AddAnyTransition(to, condition);
 
-    protected virtual void Update()
+    private void Update()
     {
+        // All inherited classes shoul NEVER call Update()
+        // They MUST use Tick()
         if (Time.time >= tickDeadline)
         {
             tickDeadline = Time.time + tickSpeed;
