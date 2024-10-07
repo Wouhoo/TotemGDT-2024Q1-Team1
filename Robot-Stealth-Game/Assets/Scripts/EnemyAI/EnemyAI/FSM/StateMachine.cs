@@ -4,6 +4,14 @@ using UnityEngine;
 using UnityEngine.AI;
 using Object = System.Object;
 
+/// <summary>
+/// 
+/// This is the state machine; DO NOT UNDER ANY CIRCUMSTANCE EDIT THIS!!!
+/// I HAVE NO IDEA HOW IT WORKS
+/// TLDR; it does the stuff we need it to do in the background for us.
+/// 
+/// </summary>
+
 public class StateMachine
 {
     private IState _currentState;

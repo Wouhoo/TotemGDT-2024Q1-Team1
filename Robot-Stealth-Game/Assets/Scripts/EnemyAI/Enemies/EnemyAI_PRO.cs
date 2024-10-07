@@ -6,6 +6,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// This enemy is smart; it can look through its eyes.
+/// </summary>
+
 public class EnemyAI_PRO : EnemyAI
 {
     [HideInInspector] public VisionSensor localVisionSensor;

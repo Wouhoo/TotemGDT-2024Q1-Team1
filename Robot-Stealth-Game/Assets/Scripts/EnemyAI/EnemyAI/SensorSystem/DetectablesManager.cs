@@ -5,6 +5,14 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// 
+/// DO NOT EDIT!
+/// This script tracks all detectable objects; those being things sensors can see or touch.
+/// Must be included in scene.
+/// 
+/// </summary>
+
 public class DetectablesManager : MonoBehaviour
 {
     public static DetectablesManager Instance { get; private set; } = null;

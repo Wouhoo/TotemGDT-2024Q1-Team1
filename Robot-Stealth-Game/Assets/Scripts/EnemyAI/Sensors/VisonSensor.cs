@@ -3,10 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyAI))]
+/// <summary>
+/// 
+/// Im really tired, i'll add proper comments to this file some other time
+/// plus it'll probably still change a bunch, so why bother
+/// 
+/// </summary>
+
 public class VisionSensor : MonoBehaviour
 {
-    [HideInInspector] public EnemyAI enemyAI;
     public float tickSpeed = 0.2f;
     [HideInInspector] public HashSet<GameObject> targets = new HashSet<GameObject>();
     [HideInInspector] public HashSet<EnemyVisionManager> enemyManagers = new HashSet<EnemyVisionManager>();

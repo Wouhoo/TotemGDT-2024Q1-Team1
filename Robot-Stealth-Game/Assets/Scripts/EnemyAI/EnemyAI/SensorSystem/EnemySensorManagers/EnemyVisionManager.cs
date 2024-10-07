@@ -9,10 +9,19 @@ using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// 
+/// An instance of this script is initialized by an enemy.
+/// This script manages which vision sensors it can "see" trhough.
+/// The sensors must be provided by the enemy.
+/// This script also manages the logic of how to process its visual information.
+/// 
+/// </summary>
+
 public class EnemyVisionManager
 {
-    public Transform targetTransform;
-    public Vector3 targetVector;
+    public Transform targetTransform; // The targets transform (null if not visable)
+    public Vector3 targetVector; // The last position of the last seen target before it left our vision
 
     public HashSet<VisionSensor> visionSensors = new HashSet<VisionSensor>();
     public HashSet<GameObject> visionTargets = new HashSet<GameObject>();
@@ -21,13 +30,16 @@ public class EnemyVisionManager
     private readonly int canTarget; // ie. can attack body
     private readonly int preference; // ie. prefer to attack nearest
 
-    public EnemyVisionManager(Transform location, int canTarget = 2, int preference = 0) // 0: body, 1: arms, 2: (can:both) (pref:near)
+    public EnemyVisionManager(Transform location, int canTarget = 2, int preference = 0)
     {
         this.location = location;
         this.canTarget = canTarget;
+        // can target: 0 (body only) , 1 (arms only) , 2 (both arms and body) 
         this.preference = preference;
+        // prefers to target: 0 (body) , 1 (nearest arm) , 2 (nearest object)
     }
 
+    // The following function will be called by the enemy class, telling us which vision sensors we should be using
     public void ListenersRefresh(HashSet<VisionSensor> newSensors)
     {
         if (newSensors.SetEquals(visionSensors)) // Don't run if not needed
@@ -56,23 +68,25 @@ public class EnemyVisionManager
         }
     }
 
+    // The following function is called when what is in our vision changes
     public void VisionUpdate()
     {
-        Debug.Log("VisionUpdate");
         HashSet<GameObject> oldTargets = new HashSet<GameObject>(visionTargets);
-        // Get the current visable targets
+        // We first get the current visable targets
         visionTargets.Clear();
         foreach (VisionSensor sensor in visionSensors)
         {
             if (sensor != null) // Saftey
-            {
                 visionTargets.UnionWith(sensor.targets);
-            }
+            else
+                visionSensors.Remove(sensor);
         }
 
+        // First check if any changes
         if (oldTargets == visionTargets)
             return; // No changes
 
+        // Then check if we have any targets
         if (visionTargets.Count == 0)
         {
             NullifyTargets();
@@ -80,7 +94,7 @@ public class EnemyVisionManager
         }
 
         GameObject playerObject = GameObject.FindWithTag("Player"); // (find with tag is bad!)
-        // The following is the fastest decision tree to targeting
+        // ALERT : The following is the (fastest?) decision tree to handel targeting logic
         if (canTarget == 0) // Can only target body
         {
             if (visionTargets.Contains(playerObject))
@@ -141,6 +155,7 @@ public class EnemyVisionManager
         return;
     }
 
+    // The following function activates when our line of sight is cleared; so the reansform is emptied out, and the last seen position vector is updated
     private void NullifyTargets()
     {
         if (targetTransform != null)
@@ -149,6 +164,7 @@ public class EnemyVisionManager
         // else do nothing
     }
 
+    // The following function gets the nearest target out of the visable targets; and updates the target transform
     private void TargetNearest()
     {
         float minDist = Mathf.Infinity;
