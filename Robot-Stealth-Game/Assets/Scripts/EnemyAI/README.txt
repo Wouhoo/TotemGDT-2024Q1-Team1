@@ -48,6 +48,8 @@ Adding Sensors:
 * You may need to look through said class to know what inputs the constructor requires
 * And you are done.
 
+IMPLEMENTATION NOTICE: Make sure you add a NavMeshAgent to the enemy in unity (see unity documentation on navigation meshes!)
+
 ---------------------------------------------------------------------
 
 >                        <
