@@ -1819,10 +1819,9 @@ GameObject:
   - component: {fileID: 1317888042}
   - component: {fileID: 1317888041}
   - component: {fileID: 1317888045}
-  - component: {fileID: 1317888046}
   - component: {fileID: 1317888048}
   - component: {fileID: 1317888047}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1909,7 +1908,7 @@ Transform:
   m_GameObject: {fileID: 1317888040}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.04, y: 0.5, z: 5}
+  m_LocalPosition: {x: 2.04, y: 3.46, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1928,18 +1927,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
---- !u!114 &1317888046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1317888040}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2107ac46e96f1144bb496de752697463, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &1317888047
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2249,7 +2236,7 @@ MonoBehaviour:
   - {fileID: 261646164}
   - {fileID: 2014303296}
   - {fileID: 1067729665}
-  gizmoColor: {r: 0, g: 0, b: 1, a: 1}
+  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!195 &1459202944
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3377,7 +3364,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8015996808860914811, guid: 75abeb907686d644882e756aca1c0395, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -15,20 +15,17 @@ public class VisionSensor : MonoBehaviour
     public float tickSpeed = 0.2f;
     [HideInInspector] public HashSet<GameObject> targets = new HashSet<GameObject>();
     [HideInInspector] public HashSet<EnemyVisionManager> enemyManagers = new HashSet<EnemyVisionManager>();
-    public float visionConeAngle = 60f;
-    public float visionConeRange = 30f;
-    public Color visionConeColour = new Color(1f, 0f, 0f, 0.25f);
-
+    public float visionRadius = 30f;
+    public float visionAngle = 60f;
     public float cosVisionConeAngle { get; private set; } = 0f;
 
-    [SerializeField] LayerMask detectionMask = ~0;
+    [SerializeField] LayerMask visionLayer;
+    [SerializeField] private LayerMask visionObstacleLayer;
+
     private float tickDeadline;
     private void Awake()
     {
-        // First let the sensor manager know this sensor exists
-        SensorManager.Instance.RegisterVisionSensor(gameObject);
-
-        cosVisionConeAngle = Mathf.Cos(visionConeAngle * Mathf.Deg2Rad);
+        cosVisionConeAngle = Mathf.Cos(visionAngle * Mathf.Deg2Rad);
     }
 
     private void Update()
@@ -36,7 +33,7 @@ public class VisionSensor : MonoBehaviour
         if (Time.time >= tickDeadline)
         {
             tickDeadline = Time.time + tickSpeed;
-            HashSet<GameObject> newTargets = SensorUpdate(DetectablesManager.Instance.AllTargets);
+            HashSet<GameObject> newTargets = SensorUpdate();
             if (!newTargets.SetEquals(targets))
             {
                 targets = newTargets;
@@ -47,38 +44,30 @@ public class VisionSensor : MonoBehaviour
         }
     }
 
-    public HashSet<GameObject> SensorUpdate(HashSet<GameObject> candidateTargets)
+    public HashSet<GameObject> SensorUpdate()
     {
         HashSet<GameObject> detectedTargets = new HashSet<GameObject>();
-        foreach (var target in candidateTargets)
+        Collider[] targetsInRange = Physics.OverlapSphere(transform.position, visionRadius, visionLayer);
+        foreach (var target in targetsInRange)
         {
             if (CheckTarget(target))
-                detectedTargets.Add(target);
+                detectedTargets.Add(target.gameObject);
         }
         return detectedTargets;
     }
 
-    private bool CheckTarget(GameObject target)
+    private bool CheckTarget(Collider target)
     {
-        // skip if the candidate is ourselves
-        if (target.gameObject == gameObject)
-            return false;
-        var vectorToTarget = target.transform.position - transform.position;
-
-        // if out of range - cannot see
-        if (vectorToTarget.sqrMagnitude > (visionConeRange * visionConeRange))
-            return false;
-        vectorToTarget.Normalize();
-
-        // if out of vision cone - cannot see
+        // check if in vision cone
+        Vector3 vectorToTarget = (target.transform.position - transform.position).normalized;
         if (Vector3.Dot(vectorToTarget, transform.forward) < cosVisionConeAngle)
             return false;
 
         // raycast to target passes?
         RaycastHit hitResult;
-        if (Physics.Raycast(transform.position, vectorToTarget, out hitResult, visionConeRange, detectionMask, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(transform.position, vectorToTarget, out hitResult, visionRadius))
         {
-            if (hitResult.collider.gameObject == target)
+            if (hitResult.collider == target)
                 return true;
         }
         return false;

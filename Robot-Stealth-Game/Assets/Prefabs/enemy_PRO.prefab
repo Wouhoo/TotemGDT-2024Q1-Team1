@@ -156,9 +156,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tickSpeed: 0.2
-  visionConeAngle: 60
-  visionConeRange: 30
-  visionConeColour: {r: 1, g: 0, b: 0, a: 0.25}
-  detectionMask:
+  visionRadius: 30
+  visionAngle: 60
+  visionLayer:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 128
+  visionObstacleLayer:
+    serializedVersion: 2
+    m_Bits: 64
