@@ -2020,6 +2020,7 @@ GameObject:
   - component: {fileID: 1317888041}
   - component: {fileID: 1317888045}
   - component: {fileID: 1317888046}
+  - component: {fileID: 1317888048}
   - component: {fileID: 1317888047}
   m_Layer: 0
   m_Name: Player
@@ -2166,6 +2167,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1317888048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317888040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6be4b66564f744b7aa1f5c8aaabf71d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noodleArmHandPrefab: {fileID: 5808577711869575174, guid: 8e61a208cee21442687c28057f643b63, type: 3}
 --- !u!1 &1358684050
 GameObject:
   m_ObjectHideFlags: 0
@@ -2435,7 +2449,7 @@ MonoBehaviour:
   - {fileID: 261646164}
   - {fileID: 2014303296}
   - {fileID: 1067729665}
-  gizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!195 &1459202944
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3028,7 +3042,7 @@ MonoBehaviour:
   - {fileID: 877503380}
   - {fileID: 1757208428}
   - {fileID: 2124435429}
-  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
+  gizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!195 &1794410875
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3233,7 +3247,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7ad8b4cb8d534a47b1d9f26392b1bd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyAI: {fileID: 0}
   tickSpeed: 0.2
   visionConeAngle: 60
   visionConeRange: 30
