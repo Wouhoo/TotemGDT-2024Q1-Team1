@@ -7,8 +7,8 @@ public class Camera_Movement_Controller : MonoBehaviour
 
     public Transform target;
     public float smoothSpeed = 0.125f;
-    public Vector3 locationOffset;
-    public Vector3 rotationOffset;
+    public Vector3 locationOffset = new Vector3(0,7,0);
+    public Vector3 rotationOffset = new Vector3(100,0,0);
 
     void FixedUpdate()
     {
