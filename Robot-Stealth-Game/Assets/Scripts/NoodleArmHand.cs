@@ -49,7 +49,7 @@ public class NoodleArmHand : MonoBehaviour
             else
             {
                 //prevents physics engine glitchyness
-                rb.velocity = Vector3.zero;
+                //rb.velocity = Vector3.zero;
             }
         }
     }

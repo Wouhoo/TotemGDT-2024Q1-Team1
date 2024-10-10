@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NoodleArmController : MonoBehaviour
+public class NoodleArmSpawner : MonoBehaviour
 {
 
     public GameObject noodleArmHandPrefab; // Reference to the prefab in the Inspector
