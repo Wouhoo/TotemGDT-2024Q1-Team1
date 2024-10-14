@@ -6426,6 +6426,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3704690935989897149, guid: 5642da63804c90841876fc712d46127e, type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 3704690935989897149, guid: 5642da63804c90841876fc712d46127e, type: 3}
+      propertyPath: playerMask.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
     - target: {fileID: 7535219911081699973, guid: 5642da63804c90841876fc712d46127e, type: 3}
       propertyPath: m_Name
       value: enemy_PRO

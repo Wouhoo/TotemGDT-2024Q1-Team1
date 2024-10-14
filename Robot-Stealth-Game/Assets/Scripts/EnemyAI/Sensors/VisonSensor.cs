@@ -12,48 +12,46 @@ using UnityEngine;
 
 public class VisionSensor : MonoBehaviour
 {
-    public float tickSpeed = 0.2f;
+    public float tickRate = 0.2f;
     [HideInInspector] public HashSet<GameObject> targets = new HashSet<GameObject>();
     [HideInInspector] public HashSet<EnemyVisionManager> enemyManagers = new HashSet<EnemyVisionManager>();
     public float visionRadius = 30f;
     public float visionAngle = 60f;
-    public float cosVisionConeAngle { get; private set; } = 0f;
+    private float cosVisionConeAngle;
+    private LayerMask playerMask;
+    private LayerMask layerMask;
 
-    [SerializeField] LayerMask visionLayer;
-    [SerializeField] private LayerMask visionObstacleLayer;
-
-    private float tickDeadline;
     private void Awake()
     {
+        playerMask = LayerMask.GetMask("Player");
+        layerMask = LayerMask.GetMask("Player", "Obstacle");
         cosVisionConeAngle = Mathf.Cos(visionAngle * Mathf.Deg2Rad);
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (Time.time >= tickDeadline)
-        {
-            tickDeadline = Time.time + tickSpeed;
-            HashSet<GameObject> newTargets = SensorUpdate();
-            if (!newTargets.SetEquals(targets))
-            {
-                targets = newTargets;
-                foreach (EnemyVisionManager enemy in enemyManagers)
-                    if (enemy != null)
-                        enemy.VisionUpdate();
-            }
-        }
+        // Register this sensor with the sensor manager
+        if (SensorManager.Instance != null)
+            SensorManager.Instance.VisionSensors.Add(gameObject);
+        InvokeRepeating("SensorUpdate", tickRate, tickRate);
     }
 
-    public HashSet<GameObject> SensorUpdate()
+    public void SensorUpdate()
     {
         HashSet<GameObject> detectedTargets = new HashSet<GameObject>();
-        Collider[] targetsInRange = Physics.OverlapSphere(transform.position, visionRadius, visionLayer);
+        Collider[] targetsInRange = Physics.OverlapSphere(transform.position, visionRadius, playerMask);
         foreach (var target in targetsInRange)
         {
             if (CheckTarget(target))
                 detectedTargets.Add(target.gameObject);
         }
-        return detectedTargets;
+        if (!detectedTargets.SetEquals(targets))
+        {
+            targets = detectedTargets;
+            foreach (EnemyVisionManager enemy in enemyManagers)
+                if (enemy != null)
+                    enemy.VisionUpdate();
+        }
     }
 
     private bool CheckTarget(Collider target)
@@ -65,7 +63,7 @@ public class VisionSensor : MonoBehaviour
 
         // raycast to target passes?
         RaycastHit hitResult;
-        if (Physics.Raycast(transform.position, vectorToTarget, out hitResult, visionRadius))
+        if (Physics.Raycast(transform.position, vectorToTarget, out hitResult, visionRadius, layerMask))
         {
             if (hitResult.collider == target)
                 return true;
@@ -83,9 +81,10 @@ public class VisionSensor : MonoBehaviour
         enemyManagers.Remove(enemy);
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         if (SensorManager.Instance != null)
-            SensorManager.Instance.DeregisterVisionSensor(gameObject);
+            SensorManager.Instance.VisionSensors.Remove(gameObject);
+        CancelInvoke();
     }
 }

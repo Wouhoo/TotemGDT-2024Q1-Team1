@@ -32,14 +32,4 @@ public class SensorManager : MonoBehaviour
         }
         Instance = this;
     }
-
-    public void RegisterVisionSensor(GameObject sensor)
-    {
-        VisionSensors.Add(sensor);
-    }
-
-    public void DeregisterVisionSensor(GameObject sensor)
-    {
-        VisionSensors.Remove(sensor);
-    }
 }

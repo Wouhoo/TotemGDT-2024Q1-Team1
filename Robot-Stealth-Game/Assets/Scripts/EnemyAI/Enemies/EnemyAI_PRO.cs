@@ -42,9 +42,9 @@ public class EnemyAI_PRO : EnemyAI
 
     protected override void Tick()
     {
+        base.Tick();
         UpdateSensors();
     }
-
     private void UpdateSensors()
     {
         // new vision sensors : NEW ONES

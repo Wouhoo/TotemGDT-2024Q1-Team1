@@ -18,7 +18,7 @@ public class EnemyAI : MonoBehaviour
     [HideInInspector] protected Animator animator;
     protected StateMachine stateMachine = new StateMachine();
 
-    private float tickSpeed = 0.2f;
+    private float tickRate = 0.2f;
     private float tickDeadline;
 
     private void Awake()
@@ -27,26 +27,15 @@ public class EnemyAI : MonoBehaviour
         // (note: this may all be moved into the individual enemy scripts in the futre for practical purposes)
         navMeshAgent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        InvokeRepeating("Tick", tickRate, tickRate);
     }
 
     // We setup two curtial functions which make our code in the individual enemy scripts more legible
     protected void At(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
     protected void Any(IState to, Func<bool> condition) => stateMachine.AddAnyTransition(to, condition);
 
-    private void Update()
-    {
-        // All inherited classes should NEVER call Update()
-        // They MUST use Tick()
-        if (Time.time >= tickDeadline)
-        {
-            tickDeadline = Time.time + tickSpeed;
-            stateMachine.Tick();
-            Tick();
-        }
-    }
-
     protected virtual void Tick()
     {
-        // Do nothing by default
+        stateMachine.Tick();
     }
 }

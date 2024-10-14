@@ -43,6 +43,7 @@ public class EnemyAI_Patrol : EnemyAI
 
     protected override void Tick()
     {
+        base.Tick();
         //update the pausecounter in case we are at a pause waypoint
         //TODO: would be nicer if handled in the waypoint itself maybe?
         //prevent underflow in the 1/100000 chance it might happen
