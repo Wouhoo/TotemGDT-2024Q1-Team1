@@ -18,7 +18,7 @@ public class EnemyAI : MonoBehaviour
     [HideInInspector] protected Animator animator;
     protected StateMachine stateMachine = new StateMachine();
 
-    private float tickRate = 0.2f;
+    protected float tickRate = 0.2f;
     private float tickDeadline;
 
     private void Awake()

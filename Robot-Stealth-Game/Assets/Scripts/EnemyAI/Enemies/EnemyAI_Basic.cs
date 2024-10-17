@@ -11,7 +11,7 @@ public class EnemyAI_Basic : EnemyAI
     {
         // STATES
         var chase = new EnemyState_Chase(navMeshAgent, target);
-        var wait = new EnemyState_Wait(navMeshAgent, waitTime);
+        var wait = new EnemyState_Idle();
 
         // TRANSITIONS
         At(chase, wait, ChaseDone());

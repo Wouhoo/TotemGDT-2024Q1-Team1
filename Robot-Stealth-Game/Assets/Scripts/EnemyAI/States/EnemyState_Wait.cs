@@ -5,14 +5,12 @@ using UnityEngine.AI;
 
 public class EnemyState_Wait : IState
 {
-    private readonly NavMeshAgent navMeshAgent;
     private readonly float waitTime;
 
     private float deadLine;
 
-    public EnemyState_Wait(NavMeshAgent navMeshAgent, float waitTime)
+    public EnemyState_Wait(float waitTime)
     {
-        this.navMeshAgent = navMeshAgent;
         this.waitTime = waitTime;
     }
 

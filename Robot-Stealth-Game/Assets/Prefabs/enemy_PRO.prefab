@@ -14,7 +14,9 @@ GameObject:
   - component: {fileID: 8088917304910158524}
   - component: {fileID: 1857773520182690955}
   - component: {fileID: 827461655811079124}
+  - component: {fileID: 3040510541580202224}
   - component: {fileID: 3704690935989897149}
+  - component: {fileID: 8862232512723820690}
   m_Layer: 0
   m_Name: enemy_PRO
   m_TagString: Untagged
@@ -142,7 +144,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9441bbbe7224b9e4090298aae103b7d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localVisionSensor: {fileID: 0}
+  attackReach: 0.6
+  memoryTime: 5
+  pursueSpeed: 5
+  inquireSpeed: 3
+--- !u!114 &3040510541580202224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7535219911081699973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 753cabe3fe4adf043a1e38aa403cf837, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bodyAttack: 1
+  canInfer: 0
+  targetTransform: {fileID: 0}
+  targetVector: {x: 0, y: 0, z: 0}
+  targetVisited: 1
 --- !u!114 &3704690935989897149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,12 +177,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7ad8b4cb8d534a47b1d9f26392b1bd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickSpeed: 0.2
+  tickRate: 0.2
   visionRadius: 30
   visionAngle: 60
-  visionLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  visionObstacleLayer:
-    serializedVersion: 2
-    m_Bits: 0
+--- !u!114 &8862232512723820690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7535219911081699973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c148d735804d2a04db34b67597ab118c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hearingRange: 10

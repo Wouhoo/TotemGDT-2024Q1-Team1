@@ -17,10 +17,12 @@ using UnityEngine.Events;
 public class SensorManager : MonoBehaviour
 {
     public static SensorManager Instance { get; private set; } = null;
-    // public HashSet<GameObject> HearingSensors = new HashSet<GameObject>();
-    // public HashSet<GameObject> MovmentSensors = new HashSet<GameObject>();
-    // public HashSet<GameObject> ProximitySensors = new HashSet<GameObject>();
-    public HashSet<GameObject> VisionSensors = new HashSet<GameObject>();
+
+    public HashSet<GameObject> targets = new HashSet<GameObject>();
+    public HashSet<EnemySensorManager> enemyManagers = new HashSet<EnemySensorManager>();
+    public HashSet<VisionSensor> visionSensors = new HashSet<VisionSensor>();
+    public HashSet<HearingSensor> hearingSensors = new HashSet<HearingSensor>();
+    // public HashSet<GameObject> proximitySensors = new HashSet<GameObject>();
 
     void Awake()
     {
@@ -31,5 +33,20 @@ public class SensorManager : MonoBehaviour
             return;
         }
         Instance = this;
+    }
+
+    public void VisionSensorUpdate()
+    {
+        HashSet<GameObject> oldTargets = new HashSet<GameObject>(targets);
+        targets.Clear();
+        foreach (VisionSensor sensor in visionSensors)
+        {
+            if (sensor != null)
+                targets.UnionWith(sensor.targets);
+        }
+        if (targets.SetEquals(oldTargets))
+            return;
+        foreach (EnemySensorManager enemy in enemyManagers)
+            enemy.TransformUpdate(targets);
     }
 }
