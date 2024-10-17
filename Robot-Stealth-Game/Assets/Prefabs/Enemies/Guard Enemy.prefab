@@ -32,7 +32,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6431985227170164253}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -146,10 +146,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gizmoColor: {r: 1, g: 0, b: 0, a: 1}
   memoryTime: 5
-  guardPosition: {x: 0, y: 0.5, z: 0}
+  guardSpeed: 2
+  guardPosition: {x: 6.5, y: 0.5, z: 7}
   guardFacingAngle: 0
-  inquireSpeed: 5
-  pursueSpeed: 10
+  inquireSpeed: 3
+  pursueSpeed: 5
   attackReach: 0.2
 --- !u!114 &6629096049438245834
 MonoBehaviour:
