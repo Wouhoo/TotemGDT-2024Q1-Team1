@@ -44,7 +44,7 @@ public class State_Patrol : IState
         Vector3 currentPos = parent.transform.position;
         for (int index = 0; index < waypoints.Length; index++)
         {
-            float dist = Vector3.Distance(currentPos, waypoints[index].transform.position);
+            float dist = Vector3.Distance(currentPos, waypoints[index].waypointPosition);
             if (dist < minDist)
             {
                 minDist = dist;
@@ -85,7 +85,7 @@ public class State_Patrol : IState
     private void NextWaypoint()
     {
         waypointIndex = (waypointIndex + 1) % waypoints.Length;
-        navMeshAgent.SetDestination(waypoints[waypointIndex].transform.position);
+        navMeshAgent.SetDestination(waypoints[waypointIndex].waypointPosition);
     }
 
     public void OnExit()

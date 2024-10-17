@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor; // see below 
 
 [RequireComponent(typeof(EnemySensorManager))]
 [DisallowMultipleComponent]
@@ -29,3 +30,16 @@ public class HearingSensor : MonoBehaviour
         SensorManager.Instance.hearingSensors.Remove(this);
     }
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(HearingSensor))]
+public class HearingSensor_Editor : Editor
+{
+    void OnSceneGUI()
+    {
+        HearingSensor sensor = (HearingSensor)target;
+        Handles.color = Color.yellow;
+        Handles.DrawWireDisc(sensor.transform.position, Vector3.up, sensor.hearingRange);
+    }
+}
+#endif //UNITY_EDITOR

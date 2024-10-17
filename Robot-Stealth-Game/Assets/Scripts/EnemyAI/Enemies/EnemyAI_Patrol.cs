@@ -5,13 +5,14 @@ using System.Diagnostics.CodeAnalysis;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEditor; // see below
 
 /// <summary>
 /// This the basic default enemy
 /// </summary>
 
 [RequireComponent(typeof(EnemySensorManager))]
-public class EnemyAI_Default : EnemyAI
+public class EnemyAI_Patrol : EnemyAI
 {
     public float memoryTime = 5f;
     [Header("Patrol State")]
@@ -76,21 +77,25 @@ public class EnemyAI_Default : EnemyAI
         Func<bool> AttackStart() => () => sensorSystem.targetTransform != null && Vector3.Distance(transform.position, sensorSystem.targetTransform.position) < attackReach;
         Func<bool> AttackDone() => () => attack.IsDone();
     }
+}
 
-
-
-    void OnDrawGizmos()
+#if UNITY_EDITOR
+[CustomEditor(typeof(EnemyAI_Patrol))]
+public class EnemyAI_Default_Editor : Editor
+{
+    void OnSceneGUI()
     {
-        //Draw this enemy's patrol paths in the editor ONLY
-        if (waypoints != null && waypoints.Length > 1)
+        EnemyAI_Patrol enemy = (EnemyAI_Patrol)target;
+        Handles.color = new Color(1f, 1f, 0f, 1f);
+        GUIStyle labelStyle = new GUIStyle();
+        labelStyle.fontSize = 20;
+        for (int i = 0; i < enemy.waypoints.Length; i++)
         {
-            for (int i = 0; i < waypoints.Length - 1; i++)
-            {
-                Gizmos.color = gizmoColor;
-                Gizmos.DrawLine(waypoints[i].transform.position, waypoints[i + 1].transform.position);
-            }
-            //draw the last line back to the start
-            Gizmos.DrawLine(waypoints[0].transform.position, waypoints[waypoints.Length - 1].transform.position);
+            Handles.SphereHandleCap(0, enemy.waypoints[i].waypointPosition, Quaternion.identity, 1f, EventType.Repaint);
+            Handles.Label(enemy.waypoints[i].waypointPosition, i.ToString(), labelStyle);
+            Handles.DrawLine(enemy.waypoints[i].waypointPosition, enemy.waypoints[(i + 1) % enemy.waypoints.Length].waypointPosition);
         }
     }
 }
+#endif //UNITY_EDITOR
+

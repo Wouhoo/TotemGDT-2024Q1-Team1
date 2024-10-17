@@ -144,11 +144,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9441bbbe7224b9e4090298aae103b7d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gizmoColor: {r: 1, g: 0, b: 0, a: 1}
+  gizmoColor: {r: 1, g: 0, b: 0, a: 0.50980395}
   memoryTime: 5
   patrolSpeed: 2
   waypoints:
-  - {fileID: 0}
+  - waypointPosition: {x: 20, y: 0.5, z: 0}
+    pauseTime: 0
+  - waypointPosition: {x: 20, y: 0.5, z: 10}
+    pauseTime: 0
   inquireSpeed: 3
   pursueSpeed: 5
   attackReach: 0.6
@@ -182,8 +185,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tickRate: 0.2
-  visionRadius: 30
-  visionAngle: 60
+  visionRadius: 10
+  visionAngle: 55
 --- !u!114 &8862232512723820690
 MonoBehaviour:
   m_ObjectHideFlags: 0

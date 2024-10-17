@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor; // see below
 
 /// <summary>
 /// 
@@ -77,3 +78,17 @@ public class VisionSensor : MonoBehaviour
         CancelInvoke();
     }
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(VisionSensor))]
+public class VisionSensor_Editor : Editor
+{
+    void OnSceneGUI()
+    {
+        VisionSensor sensor = (VisionSensor)target;
+        Handles.color = new Color(1f, 0f, 0f, 0.25f);
+        Handles.DrawSolidArc(sensor.transform.position, Vector3.up, sensor.transform.forward, sensor.visionAngle, sensor.visionRadius);
+        Handles.DrawSolidArc(sensor.transform.position, Vector3.up, sensor.transform.forward, -sensor.visionAngle, sensor.visionRadius);
+    }
+}
+#endif //UNITY_EDITOR
