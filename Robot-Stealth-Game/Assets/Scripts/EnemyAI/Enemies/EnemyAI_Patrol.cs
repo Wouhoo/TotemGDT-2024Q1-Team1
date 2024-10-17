@@ -9,17 +9,13 @@ public class EnemyAI_Patrol : EnemyAI
     //public Transform[] waypoints;
     public Waypoint[] waypoints;
 
-    public Color gizmoColor;
-    //workaround, unity is a bit dumb with uninitialized colors
-    private bool isColorAssigned = false;
-
     private float pauseCounter = 0.0f;
 
     private void Start()
     {
 
         // STATES
-        var patrol = new EnemyState_Patrol(navMeshAgent, waypoints, patrolSpeed, this);
+        var patrol = new State_Patrol(navMeshAgent, waypoints, patrolSpeed, this);
 
         // TRANSITIONS
 
@@ -57,18 +53,9 @@ public class EnemyAI_Patrol : EnemyAI
         }
     }
 
-
-
     //draw lines in the editor for level design
     void OnDrawGizmos()
     {
-        if (!isColorAssigned)
-        {
-            isColorAssigned = true;
-            //get a color to show in the editor
-            gizmoColor = GizmoColorManager.GetNextColor();
-        }
-
         //Draw this enemy's patrol paths in the editor ONLY
         if (waypoints != null && waypoints.Length > 1)
         {

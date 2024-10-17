@@ -78,7 +78,8 @@ public class State_Look : IState
     {
         Debug.Log("Look : Exit");
         isDone = false; // we always default to is done being false
-        parent.StopCoroutine(rotationCoroutine);
+        if (rotationCoroutine != null)
+            parent.StopCoroutine(rotationCoroutine);
     }
 
     public bool IsDone()

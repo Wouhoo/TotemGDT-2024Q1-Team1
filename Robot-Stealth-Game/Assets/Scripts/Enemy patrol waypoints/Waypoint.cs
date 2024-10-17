@@ -1,21 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 /*
-This is the base Waypoint class, other variants extend this one
-This one has no fancy behavior, just a basic waypoint
+This is the Waypoint class, only one enemy per waypoint,
 */
 
 public class Waypoint : MonoBehaviour
 {
-    //Not a fan of the fact that this is the type of a patrolling enemy, is confusing
-    public EnemyAI_Patrol assignedEnemy;
-
-    //upon arriving at this waypoint
-    public virtual void OnReachWaypoint()
-    {
-        //nothing
-    }
+    public EnemyAI assignedEnemy;
+    public float pauseTime = 0f;
 
     void OnDrawGizmos()
     {
@@ -26,11 +20,5 @@ public class Waypoint : MonoBehaviour
             Gizmos.color = assignedEnemy.gizmoColor;
             Gizmos.DrawSphere(transform.position, 0.5f); // Draw a sphere for the waypoint in editor
         }
-    }
-
-    //upon arriving at next waypoint
-    public virtual void OnExitWaypoint()
-    {
-        
     }
 }

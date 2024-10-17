@@ -13,10 +13,23 @@ using UnityEngine.AI;
 [RequireComponent(typeof(EnemySensorManager))]
 public class EnemyAI_Default : EnemyAI
 {
-    public float attackReach = 0.2f;
     public float memoryTime = 5f;
-    public float pursueSpeed = 10f;
+    [Header("Patrol State")]
+    public float patrolSpeed;
+    public Waypoint[] waypoints;
+
+    [Header("Look Around State")]
+
+    [Header("Inquire State")]
     public float inquireSpeed = 5f;
+
+    [Header("Pursue State")]
+    public float pursueSpeed = 10f;
+
+    [Header("Attack State")]
+    public float attackReach = 0.2f;
+
+
 
     private EnemySensorManager sensorSystem;
 
@@ -25,17 +38,17 @@ public class EnemyAI_Default : EnemyAI
         sensorSystem = GetComponent<EnemySensorManager>();
 
         // STATES
-        var normal = new EnemyState_Idle();
+        var patrol = new State_Patrol(navMeshAgent, waypoints, patrolSpeed, this);
         var reset = new State_Look(this, 80f, navMeshAgent.angularSpeed);
         var inquire = new State_Inquire(sensorSystem, navMeshAgent, inquireSpeed, memoryTime, attackReach / 2, tickRate);
         var pursue = new State_Pursue(sensorSystem, navMeshAgent, pursueSpeed, memoryTime, attackReach / 2, tickRate);
-        var action = new EnemyState_Wait(5f);
+        var attack = new EnemyState_Wait(5f);
 
         // TRANSITIONS
-        At(normal, inquire, InquireStart());
-        At(normal, pursue, PersueStart());
+        At(patrol, inquire, InquireStart());
+        At(patrol, pursue, PersueStart());
 
-        At(reset, normal, ResetDone());
+        At(reset, patrol, ResetDone());
         At(reset, inquire, InquireStart());
         At(reset, pursue, PersueStart());
 
@@ -44,12 +57,12 @@ public class EnemyAI_Default : EnemyAI
 
         At(pursue, reset, PursueDone());
 
-        Any(action, AttackStart());
+        Any(attack, AttackStart());
 
-        At(action, pursue, AttackDone());
+        At(attack, pursue, AttackDone());
 
         // START STATE
-        stateMachine.SetState(normal);
+        stateMachine.SetState(patrol);
 
         // CONDITIONS
         Func<bool> ResetDone() => () => reset.IsDone();
@@ -61,6 +74,23 @@ public class EnemyAI_Default : EnemyAI
         Func<bool> PursueDone() => () => pursue.IsDone();
 
         Func<bool> AttackStart() => () => sensorSystem.targetTransform != null && Vector3.Distance(transform.position, sensorSystem.targetTransform.position) < attackReach;
-        Func<bool> AttackDone() => () => normal.IsDone();
+        Func<bool> AttackDone() => () => attack.IsDone();
+    }
+
+
+
+    void OnDrawGizmos()
+    {
+        //Draw this enemy's patrol paths in the editor ONLY
+        if (waypoints != null && waypoints.Length > 1)
+        {
+            for (int i = 0; i < waypoints.Length - 1; i++)
+            {
+                Gizmos.color = gizmoColor;
+                Gizmos.DrawLine(waypoints[i].transform.position, waypoints[i + 1].transform.position);
+            }
+            //draw the last line back to the start
+            Gizmos.DrawLine(waypoints[0].transform.position, waypoints[waypoints.Length - 1].transform.position);
+        }
     }
 }

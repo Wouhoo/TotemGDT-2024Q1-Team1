@@ -19,7 +19,7 @@ public class EnemyAI : MonoBehaviour
     protected StateMachine stateMachine = new StateMachine();
 
     protected float tickRate = 0.2f;
-    private float tickDeadline;
+    public Color gizmoColor = Color.red;
 
     private void Awake()
     {
@@ -37,5 +37,10 @@ public class EnemyAI : MonoBehaviour
     protected virtual void Tick()
     {
         stateMachine.Tick();
+    }
+
+    private void OnDestroy()
+    {
+        CancelInvoke();
     }
 }
