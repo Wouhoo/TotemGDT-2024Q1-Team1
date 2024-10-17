@@ -2,20 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Door : TriggerableObject
+public class Door : MonoBehaviour, ISignalReceiver
 {
     // Called when the door is activated by e.g. a button (overrides default ButtonActivate from TriggerableObject)
-    public override void ButtonActivate()
+    public void Signal(bool signal)
     {
         // Open door if it is closed & vice versa
-        if (gameObject.activeSelf)
-        {
+        if (signal)
             OpenDoor();
-        }
         else
-        { 
             CloseDoor();
-        }
     }
 
     // Opens the door
