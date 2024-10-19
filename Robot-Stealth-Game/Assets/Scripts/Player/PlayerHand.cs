@@ -5,10 +5,11 @@ using UnityEngine.AI;
 
 public class PlayerHand : MonoBehaviour
 {
+    public KeyCode noodleKey = KeyCode.Space;
+    public float handForce = 5f;
     private Transform playerTransform;
-    public float handSpeed = 5f;
-    public float armLength = 10f;
     private Rigidbody rb;
+    private bool armDeployed = false;
 
     void Start()
     {
@@ -18,8 +19,8 @@ public class PlayerHand : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Check if hand is within max distance; if not we do nothing and let the spring take over
-        if (Vector3.Distance(transform.position, playerTransform.position) > armLength)
+        // Check if the arm is deployed
+        if (!armDeployed)
             return;
 
         Vector3 direction = MouseWorldPosition.GetMouseWorldPosition() - transform.position;
@@ -30,8 +31,15 @@ public class PlayerHand : MonoBehaviour
         if (direction.magnitude < 0.1f)
             return;
 
-        // Only move if the object is far enough from the target
-        //rb.MovePosition(transform.position + direction.normalized * handSpeed * Time.deltaTime);
-        rb.AddForce(direction.normalized * handSpeed);
+        // Apply force in direction of hand
+        rb.AddForce(direction * handForce);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(noodleKey))
+        {
+            armDeployed = !armDeployed;
+        }
     }
 }
