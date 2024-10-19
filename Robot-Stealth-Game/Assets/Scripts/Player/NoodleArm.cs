@@ -6,38 +6,45 @@ public class NoodleArm : MonoBehaviour
     public float reach = 10f;
     public int armSegments;
     public float armYOffset;
+    public GameObject anchor;
     public GameObject armNodePrefab;
-    public GameObject handNodePrefab;
+    public GameObject targetNodePrefab;
+    public KeyCode noodleKey = KeyCode.Space;
 
-
-    public LayerMask collMask;
-
+    private Rigidbody leadingBody;
+    private ConfigurableJoint targetJoint;
     private LineRenderer lineRenderer;
+    private MeshFilter meshFilter;
     private List<Transform> armNodes = new List<Transform>();
+
+    private bool armDeployed = false;
 
     private void Awake()
     {
+
+        meshFilter = GetComponent<MeshFilter>();
+
         // The player is the first arm node
-        GameObject player = GameObject.FindWithTag("Player");
-        armNodes.Add(player.transform);
-        Rigidbody prevRB = player.GetComponent<Rigidbody>();
+        armNodes.Add(anchor.transform);
+        Rigidbody prevRB = anchor.GetComponent<Rigidbody>();
 
-        ConfigurableJoint joint;
+        ConfigurableJoint leadingJoint;
+        SoftJointLimit limit;
 
-        Vector3 spawnPosition = player.transform.position;
+        Vector3 spawnPosition = anchor.transform.position;
         spawnPosition.y = armYOffset;
         for (var i = 0; i < armSegments; i++)
         {
             // Instantiate the segment
             GameObject armNode = Instantiate(armNodePrefab, spawnPosition, Quaternion.identity, transform);
-            joint = armNode.GetComponent<ConfigurableJoint>();
+            leadingJoint = armNode.GetComponent<ConfigurableJoint>();
 
             // Set the connected body
-            joint.connectedBody = prevRB;
+            leadingJoint.connectedBody = prevRB;
             // Limit the maximum reach
-            SoftJointLimit limit = joint.linearLimit;
+            limit = leadingJoint.linearLimit;
             limit.limit = reach / (armSegments + 1);
-            joint.linearLimit = limit;
+            leadingJoint.linearLimit = limit;
 
             prevRB = armNode.GetComponent<Rigidbody>();
 
@@ -45,10 +52,9 @@ public class NoodleArm : MonoBehaviour
         }
 
         // Setup the final hand node
-        GameObject handNode = Instantiate(handNodePrefab, spawnPosition, Quaternion.identity, transform);
-        joint = handNode.GetComponent<ConfigurableJoint>();
-        joint.connectedBody = prevRB;
-        armNodes.Add(handNode.transform);
+        GameObject leadingNode = Instantiate(targetNodePrefab, spawnPosition, Quaternion.identity, transform);
+        targetJoint = leadingNode.GetComponent<ConfigurableJoint>();
+        leadingBody = prevRB;
 
         // setup line renderer
         lineRenderer = GetComponent<LineRenderer>();
@@ -59,11 +65,26 @@ public class NoodleArm : MonoBehaviour
     private void Update()
     {
         UpdateLineRenderer();
+        if (Input.GetKeyDown(noodleKey))
+        {
+            if (armDeployed)
+                targetJoint.connectedBody = null;
+            else
+                targetJoint.connectedBody = leadingBody;
+            armDeployed = !armDeployed;
+        }
+        if (armDeployed)
+        {
+            Vector3 targetPosition = MouseWorldPosition.GetMouseWorldPosition();
+            targetPosition.y = armYOffset;
+            targetJoint.transform.position = targetPosition;
+        }
     }
 
     private void UpdateLineRenderer()
     {
         for (int i = 0; i < lineRenderer.positionCount; i++)
             lineRenderer.SetPosition(i, armNodes[i].position);
+        lineRenderer.BakeMesh(meshFilter.mesh, true);
     }
 }
