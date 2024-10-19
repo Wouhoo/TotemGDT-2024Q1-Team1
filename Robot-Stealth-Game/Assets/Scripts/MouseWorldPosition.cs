@@ -17,10 +17,8 @@ public static class MouseWorldPosition
         RaycastHit hit;
 
         // Cast the ray onto the terrain (or any collider with physics) and return the hit point if it hits something
-        if (Physics.Raycast(ray, out hit))
-        {
+        if (Physics.Raycast(ray, out hit, 99f, LayerMask.GetMask("Obstacle")))
             return hit.point; // Return the point where the ray hits the terrain or collider
-        }
 
         // If nothing is hit, return a default value (could adjust based on your needs)
         return Vector3.zero;

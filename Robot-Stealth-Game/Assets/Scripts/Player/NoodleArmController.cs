@@ -4,19 +4,22 @@ using UnityEngine;
 
 public class NoodleArmController : MonoBehaviour
 {
-    
+
     public GameObject player;
     public GameObject handPrefab;
-    public GameObject armFragmentPrefab;
+    public GameObject armSegmentPrefab;
     public KeyCode noodleKey = KeyCode.Mouse0;
 
-    public GameObject noodleHand;
+    public GameObject anchorSegment;
 
     //TODO: grab actual length of component
-    private float fragmentLength;  // Distance between fragments
+    public float maxSegmentLength = 1f;  // Length of an arm segment
+    public int maxNumberOfSegments = 30;  // This times maxSegmentLength is the maximum total arm length
+    public float armYOffset = 0.5f;
 
     //list of arm fragments, ordered from player towards hand!
-    private List<GameObject> armFragments;
+    private List<GameObject> armSegments;
+    private GameObject leadingArmSegment;
 
     private bool isDeployed = false;
 
@@ -25,61 +28,32 @@ public class NoodleArmController : MonoBehaviour
         //TODO: maybe not the best solution but this is the best option
         player = GameObject.FindWithTag("Player");
 
-        //get the length of the arm fragments
-        if (armFragmentPrefab != null)
-        {
-            //TODO: sucks and does not work
-            fragmentLength = armFragmentPrefab.GetComponent<Renderer>().bounds.size.y + 1.5f;
-        }
+        Vector3 spawnPosition = transform.position;
+        spawnPosition.y = armYOffset;
+        anchorSegment = Instantiate(armSegmentPrefab, spawnPosition, Quaternion.identity);
+        armSegments = new List<GameObject> { anchorSegment };
+        leadingArmSegment = anchorSegment;
+        ConnectFragments(player, anchorSegment);
     }
 
 
-    private void DeployNoodle()
+    private void AddArmSegment()
     {
-        Debug.Log("noodle deployed!");
-        Vector3 spawnPosition = transform.position + transform.forward * 0.2f; // 1.0f can be adjusted
-        noodleHand = Instantiate(handPrefab, spawnPosition, Quaternion.identity);
-
-        armFragments = new List<GameObject> {noodleHand};
-
-        //attach the hand to the player first
-        ConnectFragments(player, noodleHand);
-    }
-
-    private void RetractNoodle()
-    {
-        Destroy(noodleHand);
-        Debug.Log("noodle removed!");
+        GameObject newSegment = Instantiate(armSegmentPrefab, anchorSegment.transform.position, Quaternion.identity);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(noodleKey))
-        {
-            //conjureth the noodle boi
-            if(!isDeployed)
-            {
-                isDeployed = true;
-                DeployNoodle();
-            }
-            else //get rid of it
-            {
-                RetractNoodle();
-                isDeployed = false;
-            }
-
-        }
-
-        if(isDeployed)
+        if (isDeployed)
         {
             float distance;
             //get distance from 
             //Debug.Log(armFragments[0]);
-            distance = Vector3.Distance(player.transform.position, armFragments[0].transform.position);
-            
+            distance = Vector3.Distance(player.transform.position, armSegments[0].transform.position);
+
             // Check if a new fragment needs to be spawned
-            if (distance > fragmentLength)
+            if (distance > maxSegmentLength)
             {
                 //Debug.Log("SPAWNING NEW ARM FRAGMENT: " + distance);
                 // Spawn a new fragment
@@ -87,27 +61,6 @@ public class NoodleArmController : MonoBehaviour
             }
         }
     }
-
-    // void SpawnArmFragment()
-    // {
-    //     // Calculate the spawn position along the line between player and hand
-    //     Vector3 spawnPosition = player.transform.position + (armFragments[0].transform.position - player.transform.position).normalized * fragmentLength;
-        
-    //     // Instantiate the fragment
-    //     GameObject newFragment = Instantiate(armFragmentPrefab, spawnPosition, Quaternion.identity);
-        
-    //     // Optional: Set parent to player or hand to organize hierarchy
-    //     //newFragment.transform.SetParent(player);
-
-    //     // Add the fragment to the list
-    //     armFragments.Insert(0, newFragment);
-
-    //     // Optionally, add physics joints (e.g., HingeJoint or ConfigurableJoint) to connect it to the previous fragment
-    //     if (armFragments.Count > 1)
-    //     {
-    //         //ConnectFragments(armFragments[armFragments.Count - 2], newFragment);
-    //     }
-    // }
 
     //connects the two objects with a hinge joint
     void ConnectFragments(GameObject previousFragment, GameObject newFragment)
