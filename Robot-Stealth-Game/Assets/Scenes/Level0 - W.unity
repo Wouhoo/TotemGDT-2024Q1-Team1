@@ -12178,57 +12178,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 992500445}
     m_Modifications:
-    - target: {fileID: 2488289324822259567, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: m_XMotion
-      value: 2
+    - target: {fileID: 3162888274630833140, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
+      propertyPath: nodeDrag
+      value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2488289324822259567, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: m_YMotion
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2488289324822259567, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: m_ZMotion
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2488289324822259567, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: m_XDrive.maximumForce
-      value: 10000
-      objectReference: {fileID: 0}
-    - target: {fileID: 2488289324822259567, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: m_ZDrive.maximumForce
-      value: 10000
-      objectReference: {fileID: 0}
-    - target: {fileID: 2488289324822259567, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: m_XDrive.positionSpring
-      value: 10000
-      objectReference: {fileID: 0}
-    - target: {fileID: 2488289324822259567, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: m_ZDrive.positionSpring
-      value: 10000
-      objectReference: {fileID: 0}
-    - target: {fileID: 2488289324822259567, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: m_LinearLimitSpring.spring
-      value: 0.1
+    - target: {fileID: 3162888274630833140, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
+      propertyPath: armSpring
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3162888274630833140, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
       propertyPath: anchorNode
       value: 
       objectReference: {fileID: 726052066}
     - target: {fileID: 3162888274630833140, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: armSegments
-      value: 20
+      propertyPath: handSpring
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3162888274630833140, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: armNodePrefab
-      value: 
-      objectReference: {fileID: 3276446104135569729, guid: 3b94fb17abc900247b3e3b3b392ceeda, type: 3}
-    - target: {fileID: 3162888274630833140, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: armSegmentLength
-      value: 0.5
+      propertyPath: isDeployed
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3190732323555417320, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: m_Drag
-      value: 0
+    - target: {fileID: 3162888274630833140, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
+      propertyPath: armNodeCount
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8377226622396472190, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
       propertyPath: m_Name
@@ -16863,10 +16835,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 992500445}
     m_Modifications:
-    - target: {fileID: 1729996104849552437, guid: e30f027174912f646af2058b4fff5cd5, type: 3}
-      propertyPath: m_LinearLimit.contactDistance
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2102515376914371312, guid: e30f027174912f646af2058b4fff5cd5, type: 3}
       propertyPath: m_Name
       value: PlayerBody

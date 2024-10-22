@@ -7,73 +7,68 @@ using UnityEngine;
 
 public class PlayerArm : MonoBehaviour
 {
-    public float armSegmentLength = 1f;
-    public int armSegments = 15; // MUST BE MORE THAN 1!!! (im not building robust code here, ensure this yourself)
-    public KeyCode noodleKey = KeyCode.Space;
-
     private LineRenderer lineRenderer;
     private MeshFilter meshFilter;
 
+    [Header("Nodes")]
+    public GameObject targetNodePrefab;
+    public GameObject handNodePrefab;
     public GameObject armNodePrefab;
     public GameObject anchorNode;
-    private ConfigurableJoint handNodeJoint;
+    private SpringJoint handNodeJoint;
     private Rigidbody targetNodeRB;
     private Transform[] armNodes; // used to rener the arm
 
+    [Header("Adjustable Settings")]
+    public float armSpring;
+    public float armDampner;
+    public float handSpring;
+    public float handDampner;
+    public float nodeDrag;
+
+    [Header("Initial Conditions & Other")]
     public bool isDeployed = true;
-    public float handDriveForce = 10f;
-
-
+    public int armNodeCount = 15; // MUST BE MORE THAN 2!!! (im not building robust code here, ensure this yourself)
+    public KeyCode deployArmKey = KeyCode.Space;
 
     private void Awake()
     {
         // Get script components
         meshFilter = GetComponent<MeshFilter>();
         lineRenderer = GetComponent<LineRenderer>();
-        ConfigurableJoint anchorJoint = anchorNode.GetComponent<ConfigurableJoint>();
 
-        // Get the nodes
-        GameObject handNode = GameObject.Find("HandNode");
-        handNodeJoint = handNode.GetComponent<ConfigurableJoint>();
-        GameObject targetNode = GameObject.Find("TargetNode");
+        // Set up the arm nodes array (with fixed length)
+        armNodes = new Transform[armNodeCount];
+        lineRenderer.positionCount = armNodeCount;
+
+        // Precalculate node spawning position
+        Vector3 spawnPosition = anchorNode.transform.position;
+
+        // Setup target node & get its rigid body (for later update)
+        GameObject targetNode = Instantiate(targetNodePrefab, spawnPosition, Quaternion.identity, transform);
         targetNodeRB = targetNode.GetComponent<Rigidbody>();
 
-        Vector3 spawnPosition = anchorNode.transform.position;
-        handNode.transform.position = spawnPosition;
-        targetNode.transform.position = spawnPosition;
-
-        // Connect hand to target
-        handNodeJoint.connectedBody = targetNodeRB;
-        // And set up the arm nodes array (with fixed length)
-        armNodes = new Transform[armSegments];
-        armNodes[0] = handNode.transform;
-        lineRenderer.positionCount = armSegments;
-
+        // Setup hand node & get spring joint (for later update)
+        GameObject handNode = Instantiate(handNodePrefab, spawnPosition, Quaternion.identity, transform);
+        SetupSpringJoint(handNode, targetNodeRB, handSpring, handDampner, 0);
+        handNodeJoint = handNode.GetComponent<SpringJoint>();
+        // Set previous rigid body
         Rigidbody prevRB = handNode.GetComponent<Rigidbody>();
-        SoftJointLimit limit;
+        prevRB.drag = nodeDrag; // set drag
+
         // Add the rest of the arm
-        for (int i = 1; i < armSegments - 1; i++) // start at 1 for the hand arm node (no security checking here :p)
+        for (int i = 1; i < armNodeCount - 1; i++) // start at 1 for the hand arm node (no security checking here :p)
         {
             // Instantiate the segment
-            GameObject newArmNode = Instantiate(armNodePrefab, spawnPosition, Quaternion.identity, transform);
-            ConfigurableJoint newJoint = newArmNode.GetComponent<ConfigurableJoint>();
-            limit = newJoint.linearLimit;
-            // Set the connected body & joint limits
-            newJoint.connectedBody = prevRB;
-            limit.limit = armSegmentLength;
-            newJoint.linearLimit = limit; //set the joint's limit to our edited version.
-            // Add to array of nodes
-            armNodes[i] = newArmNode.transform;
+            GameObject armNode = Instantiate(armNodePrefab, spawnPosition, Quaternion.identity, transform);
+            SetupSpringJoint(armNode, prevRB, armSpring, armDampner, i);
             // Update previous rigid body
-            prevRB = newArmNode.GetComponent<Rigidbody>();
+            prevRB = armNode.GetComponent<Rigidbody>();
+            prevRB.drag = nodeDrag; // set drag
         }
-        // Connect body node to arm
-        anchorJoint.connectedBody = prevRB;
-        armNodes[armSegments - 1] = anchorJoint.transform;
-        // Ensure limits
-        limit = anchorJoint.linearLimit;
-        limit.limit = armSegmentLength;
-        anchorJoint.linearLimit = limit; //set the joint's limit to our edited version.
+
+        // Set up body joint
+        SetupSpringJoint(anchorNode, prevRB, armSpring, armDampner, armNodeCount - 1);
     }
 
     private void Update()
@@ -82,61 +77,32 @@ public class PlayerArm : MonoBehaviour
         UpdateLineRenderer();
 
         // We now look if we should retract or deploy the arm
-        if (Input.GetKeyDown(noodleKey))
+        if (Input.GetKeyDown(deployArmKey))
         {
             if (isDeployed)
-            {
-                JointDrive xDrive = handNodeJoint.xDrive;
-                xDrive.positionSpring = 0f;
-                handNodeJoint.xDrive = xDrive;
-                JointDrive zDrive = handNodeJoint.zDrive;
-                zDrive.positionSpring = 0f;
-                handNodeJoint.zDrive = zDrive;
-            }
+                handNodeJoint.spring = 0f;
             else
-            {
-                JointDrive xDrive = handNodeJoint.xDrive;
-                xDrive.positionSpring = handDriveForce;
-                handNodeJoint.xDrive = xDrive;
-                JointDrive zDrive = handNodeJoint.zDrive;
-                zDrive.positionSpring = handDriveForce;
-                handNodeJoint.zDrive = zDrive;
-            }
+                handNodeJoint.spring = handSpring;
             isDeployed = !isDeployed;
         }
     }
 
     private void UpdateLineRenderer()
     {
-        for (int i = 0; i < armSegments; i++)
+        for (int i = 0; i < armNodeCount; i++)
             lineRenderer.SetPosition(i, armNodes[i].transform.position - transform.position);
         lineRenderer.BakeMesh(meshFilter.mesh, true);
     }
 
-    /*
-        private void AddArmSegment(Vector3 atRelativePosition)
-        {
-            // Instantiate the segment
-            GameObject newArmNode = Instantiate(armNodePrefab, atRelativePosition + transform.position, Quaternion.identity, transform);
-            ConfigurableJoint newJoint = newArmNode.GetComponent<ConfigurableJoint>();
-            // Set the connected body
-            newJoint.connectedBody = armNodes[0].GetComponent<Rigidbody>();
-            // Add to list of nodes
-            armNodes.Insert(0, newArmNode);
-
-            // Connect body node to new arm node
-            anchorJoint.connectedBody = newArmNode.GetComponent<Rigidbody>();
-        }
-
-        private void RemoveArmSegment()
-        {
-            // Remove the node nearest to the body
-            GameObject oldArmNode = armNodes[0];
-            armNodes.Remove(oldArmNode);
-            Destroy(oldArmNode);
-
-            // Connect body node to new arm node
-            anchorJoint.connectedBody = armNodes[0].GetComponent<Rigidbody>();
-        }
-        */
+    private void SetupSpringJoint(GameObject node, Rigidbody rigidbody, float spring, float dampner, int index)
+    {
+        SpringJoint joint = node.GetComponent<SpringJoint>();
+        // Set the connected body
+        joint.connectedBody = rigidbody;
+        // Set the parameters
+        joint.spring = spring;
+        joint.damper = dampner;
+        // Add to array of nodes
+        armNodes[index] = joint.transform;
+    }
 }
