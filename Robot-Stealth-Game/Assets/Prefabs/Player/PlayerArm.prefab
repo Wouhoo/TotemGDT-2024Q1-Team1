@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2700337622328717331}
   - component: {fileID: 6577546416793796919}
   - component: {fileID: 3162888274630833140}
+  - component: {fileID: 2226319758143522669}
   m_Layer: 7
   m_Name: PlayerArm
   m_TagString: Untagged
@@ -200,13 +201,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bec02c81ad500564090b3570e4e5dbb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  armNodeCount: 30
+  deployArmKey: 32
   targetNodePrefab: {fileID: 4746410863178382828, guid: 2c9aec1bfedcfc1419218be1c379465e, type: 3}
   handNodePrefab: {fileID: 4410614055398542293, guid: a03f02fcd97ca7c4c9021445ce6fd20f, type: 3}
   armNodePrefab: {fileID: 3276446104135569729, guid: 3b94fb17abc900247b3e3b3b392ceeda, type: 3}
   anchorNode: {fileID: 0}
-  armSpring: 1000
-  armDampner: 1
+  totalArmMass: 20
+  armNodeDrag: 2
+  armSpring: 300
+  armDampner: 50
+  handMass: 1
+  handDrag: 0.1
   handSpring: 100
-  handDampner: 1
-  isDeployed: 1
-  deployArmKey: 32
+  handDampner: 2
+--- !u!64 &2226319758143522669
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8377226622396472190}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}

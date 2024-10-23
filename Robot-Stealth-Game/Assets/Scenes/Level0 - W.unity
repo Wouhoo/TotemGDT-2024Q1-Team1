@@ -12179,29 +12179,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 992500445}
     m_Modifications:
     - target: {fileID: 3162888274630833140, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: nodeDrag
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3162888274630833140, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: armSpring
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 3162888274630833140, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
       propertyPath: anchorNode
       value: 
       objectReference: {fileID: 726052066}
-    - target: {fileID: 3162888274630833140, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: handSpring
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3162888274630833140, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: isDeployed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3162888274630833140, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
-      propertyPath: armNodeCount
-      value: 30
-      objectReference: {fileID: 0}
     - target: {fileID: 8377226622396472190, guid: 9419cfd52f2a95a488f43b8375caf463, type: 3}
       propertyPath: m_Name
       value: PlayerArm
