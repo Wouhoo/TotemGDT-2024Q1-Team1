@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2700337622328717331}
   - component: {fileID: 6577546416793796919}
   - component: {fileID: 3162888274630833140}
-  - component: {fileID: 2226319758143522669}
   m_Layer: 7
   m_Name: PlayerArm
   m_TagString: Untagged
@@ -215,25 +214,3 @@ MonoBehaviour:
   handDrag: 0.1
   handSpring: 100
   handDampner: 2
---- !u!64 &2226319758143522669
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8377226622396472190}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}

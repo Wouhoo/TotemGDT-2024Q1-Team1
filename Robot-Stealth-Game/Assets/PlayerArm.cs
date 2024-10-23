@@ -11,7 +11,6 @@ public class PlayerArm : MonoBehaviour
     public KeyCode deployArmKey = KeyCode.Space;
     private LineRenderer lineRenderer;
     private MeshFilter meshFilter;
-    private MeshCollider meshCollider;
 
     [Header("Nodes")]
     public GameObject targetNodePrefab;
@@ -41,7 +40,6 @@ public class PlayerArm : MonoBehaviour
         // Get script components
         meshFilter = GetComponent<MeshFilter>();
         lineRenderer = GetComponent<LineRenderer>();
-        meshCollider = GetComponent<MeshCollider>();
 
         // Set up the arm nodes array (with fixed length)
         armNodes = new Transform[armNodeCount + 1]; // +1 for the body node
@@ -101,7 +99,6 @@ public class PlayerArm : MonoBehaviour
         for (int i = 0; i <= armNodeCount; i++)
             lineRenderer.SetPosition(i, armNodes[i].transform.position - transform.position);
         lineRenderer.BakeMesh(meshFilter.mesh, true);
-        // lineRenderer.BakeMesh(meshCollider.sharedMesh, true);
     }
 
     private void SetupSpringJoint(GameObject node, Rigidbody rigidbody, float spring, float dampner, int index)
