@@ -2,31 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Button : SignalEmitter
+public class Button : MonoBehaviour
 {
     LayerMask playerMask;
+    public List<TriggerableObject> signalReceivers;
+    int objectsOnButton = 0;
 
     private void Start()
     {
         playerMask = LayerMask.GetMask("Player");
     }
 
-
-
-    // rework this to also work if the player is on the button
-
-    private void OnMouseDown()
+    void EmitSignal(bool signal)
     {
-        // Check if the player's hands are near the button
-        // For now, this checks if anything on the player layer is near the button. We may want to change this to only the hands later.
-        Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, (transform.localScale / 2) * 1.2f, Quaternion.identity, playerMask);
-
-        if (hitColliders.Length > 0)
+        // Emit a signal to all receivers for this button
+        foreach (TriggerableObject receiver in signalReceivers)
         {
-            // When button is pressed, activate all objects
-            EmitSignal(true);
+            receiver.Trigger(signal);
         }
-        else
-            EmitSignal(false);
+    }
+
+    // When another object (player *or enemy*) moves over the button, fire a true signal
+    // This also fires when an arm *node* moves over the button; we don't want that.
+    // This can be fixed by not giving the arm nodes colliders, or by specifically excluding them with a bit of code here.
+    // (currently the second fix is implemented)
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.name != "armNode(Clone)")
+        {
+            EmitSignal(true);
+            objectsOnButton++;
+        }
+    }
+
+    // When the other object moves off of the button, fire a false signal
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.name != "armNode(Clone)")
+        {
+            objectsOnButton--;
+            if(objectsOnButton == 0)
+                EmitSignal(false);
+        }
     }
 }
