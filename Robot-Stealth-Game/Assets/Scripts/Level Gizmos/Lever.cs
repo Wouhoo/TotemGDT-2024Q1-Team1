@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Lever : MonoBehaviour, IPointerClickHandler
+public class Lever : Trigger, IPointerClickHandler
 {
     LayerMask playerMask;
     public List<TriggerableObject> signalReceivers;
-    bool signal = true;
 
     private void Start()
     {
@@ -16,18 +15,20 @@ public class Lever : MonoBehaviour, IPointerClickHandler
 
     void EmitSignal()
     {
+        Debug.Log("lol");
+        // Switch between active and inactive state
+        active = !active;
         // Emit a signal to all receivers for this lever
         foreach (TriggerableObject receiver in signalReceivers)
         {
-            receiver.Trigger(signal);
+            receiver.Trigger();
         }
-        // Flip the "sign" of the signal for next time
-        signal = !signal;
     }
 
     // When button is clicked
     public void OnPointerClick(PointerEventData eventData) 
     {
+        Debug.Log("lmao");
         // Check if the player's hands or body are near the button
         Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, (transform.localScale / 2) * 1.1f, Quaternion.identity, playerMask);
 

@@ -6,20 +6,31 @@ public class Vent : TriggerableObject
 {
     GameObject playerArm;
     Material ventMaterial;
-    [SerializeField] bool startOpen; // whether the vent is initially open or not
+    public List<Trigger> triggers;
+    [SerializeField] bool open;
 
     private void Start()
     {
         playerArm = GameObject.Find("PlayerArm");
         ventMaterial = GetComponent<Renderer>().material;
-        Trigger(startOpen);
+        if (open) OpenVent();
+        else CloseVent();
     }
 
-    // Called when the vent is activated by e.g. a button (overrides default Trigger from TriggerableObject)
-    public override void Trigger(bool signal)
+    // Called when the door is activated by e.g. a button (overrides default Trigger from TriggerableObject)
+    public override void Trigger()
     {
-        // Open vent if it is closed & vice versa
-        if (signal)
+        // Check if *any* connected triggers are active
+        bool _open = false;
+        foreach (Trigger trigger in triggers)
+        {
+            if (trigger.active)
+                _open = true;
+        }
+        if (_open == open) return; // State remains the same; no changes necessary
+        // State changed; do stuff
+        open = _open;
+        if (open)
             OpenVent();
         else
             CloseVent();

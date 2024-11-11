@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Goal : MonoBehaviour
 {
-    private EndLevel endLevel;
+    [SerializeField] EndLevel endLevel;
 
     private void Start()
     {

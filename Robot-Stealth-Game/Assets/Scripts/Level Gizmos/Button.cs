@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Button : MonoBehaviour
+public class Button : Trigger
 {
     LayerMask playerMask;
     public List<TriggerableObject> signalReceivers;
@@ -15,10 +15,11 @@ public class Button : MonoBehaviour
 
     void EmitSignal(bool signal)
     {
+        active = signal;
         // Emit a signal to all receivers for this button
         foreach (TriggerableObject receiver in signalReceivers)
         {
-            receiver.Trigger(signal);
+            receiver.Trigger();
         }
     }
 
