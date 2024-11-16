@@ -2,34 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+// using UnityEngine.InputSystem;
 
 public class ArmTargetNode : MonoBehaviour
 {
-    public KeyCode noodleKey = KeyCode.Space;
-
-    public float defaultTargetYOffset;
+    public KeyCode deployArmKey = KeyCode.Mouse0;
+    // InputAction interactAction;
+    public float shoulderHeight = 1f;
+    public float groundHeight = 0.2f;
     private float targetYOffset;
 
-    void Start()
+    private void Start()
     {
-        targetYOffset = defaultTargetYOffset;
+        // interactAction = InputSystem.actions.FindAction("Interact");
     }
 
-    void FixedUpdate()
+    private void OnEnable()
+    {
+        targetYOffset = shoulderHeight;
+    }
+
+    void Update()
     {
         Vector3 target = MouseWorldPosition.GetMouseWorldPosition();
         // We offset to the hand height
         target.y = targetYOffset;
         transform.position = target;
+
+        if (Input.GetKeyDown(deployArmKey))
+        {
+            // if by some special object do this stuff ...
+            // else we gonna make some noise!!!!
+            targetYOffset = groundHeight;
+            MakeNoise();
+            return;
+        }
+        if (Input.GetKeyUp(deployArmKey))
+        {
+            targetYOffset = shoulderHeight;
+            return;
+        }
     }
 
-    // Set the target to the ground when clicked
-    void OnMouseDown()
+    private void MakeNoise()
     {
-        targetYOffset = 0f;
+        // TODO: play some sound
+        Vector3 pos = transform.position;
+        foreach (HearingSensor sensor in SensorManager.Instance.hearingSensors)
+            sensor.SensorUpdate(pos);
     }
-    void OnMouseUp()
-    {
-        targetYOffset = defaultTargetYOffset;
-    }
+
 }

@@ -17,7 +17,8 @@ public class State_Patrol : IState
     private float initialSpeed;
     private MonoBehaviour parent;
     private Coroutine waitCoroutine;
-    private bool inWaiting = false;
+    private bool busy = false;
+    private float rotationSpeed;
 
     public State_Patrol(NavMeshAgent navMeshAgent, Waypoint[] waypoints, float patrolSpeed, MonoBehaviour parent)
     {
@@ -25,6 +26,7 @@ public class State_Patrol : IState
         this.waypoints = waypoints;
         this.patrolSpeed = patrolSpeed;
         this.parent = parent;
+        rotationSpeed = navMeshAgent.angularSpeed;
     }
 
     public void OnEnter()
@@ -33,6 +35,7 @@ public class State_Patrol : IState
         navMeshAgent.enabled = true;
         initialSpeed = navMeshAgent.speed;
         navMeshAgent.speed = patrolSpeed;
+        busy = false;
 
         TargetNearestWaypoint();
     }
@@ -59,26 +62,38 @@ public class State_Patrol : IState
         if (navMeshAgent.remainingDistance > 0.1f)
             return;
 
-        // Else we arrive at the waypoint; if we are not currently waiting, we start waiting
-        if (!inWaiting)
+        // Else we arrive at the waypoint; we are now busy until we have done all tasks here
+        if (!busy)
         {
-            if (waypoints[waypointIndex].pauseTime < 0.1f) // Check if wait time is zero (use 0.1f for float errors)
-            {
-                NextWaypoint();
-                return;
-            }
-            // else we begin the waiting routine
-            inWaiting = true;
+            busy = true;
             waitCoroutine = parent.StartCoroutine(ArriveAtWaypoint());
         }
     }
 
     private IEnumerator ArriveAtWaypoint()
     {
+        // Face target direction
+        float progress = 0f;
+        Quaternion targetOrientation = Quaternion.Euler(0, waypoints[waypointIndex].facingAngle, 0);
+        Quaternion currentOrientation = parent.transform.rotation;
+        float angleDiff = Math.Abs(Quaternion.Angle(currentOrientation, targetOrientation));
+        if (angleDiff > 0.1f) // else already facing right direction
+        {
+            float timeScale = rotationSpeed / angleDiff;
+            while (progress < 1f)
+            {
+                progress += Time.deltaTime * timeScale;
+                parent.transform.rotation = Quaternion.Slerp(currentOrientation, targetOrientation, progress);
+                yield return null; // Wait until the next frame
+            }
+        }
+
+        // We now wait for the designated pause time
         yield return new WaitForSeconds(waypoints[waypointIndex].pauseTime);
-        //After we have waited for the given pause time we move on
+
+        // We have completed all tasks, we now move on
         NextWaypoint();
-        inWaiting = false;
+        busy = false;
         parent.StopCoroutine(waitCoroutine);
     }
 
@@ -93,6 +108,8 @@ public class State_Patrol : IState
         Debug.Log("Patrol : Exit");
         navMeshAgent.speed = initialSpeed;
         navMeshAgent.enabled = false;
+        busy = false;
+
         if (waitCoroutine != null)
             parent.StopCoroutine(waitCoroutine);
     }

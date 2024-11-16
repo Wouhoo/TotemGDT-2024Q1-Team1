@@ -67,16 +67,17 @@ public class PlayerArm : MonoBehaviour
             // Set up arm node
             ConnectJoint(armNode, prevRB);
             CalibrateJointDrive(armNode, armNodeSpringConstant, armNodeDampingConstant, 999999999f);
-            CalibrateJointLimit(armNode, armSegmentLength);
+            CalibrateJointLimit(armNode, 0f); // start in disabled state
             armNodes[i] = armNode.transform;
             prevRB = armNode.GetComponent<Rigidbody>();
             CalibrateRigidbody(prevRB, armNodeMass, armNodeDrag, armNodeAngularDrag);
         }
 
         // Set up hand node
+        handNode.transform.position = spawnPosition;
         ConnectJoint(handNode, prevRB);
         CalibrateJointDrive(handNode, armNodeSpringConstant, armNodeDampingConstant, 999999999f);
-        CalibrateJointLimit(handNode, armSegmentLength);
+        CalibrateJointLimit(handNode, 0f);
         armNodes[armSegmentCount] = handNode.transform;
         prevRB = handNode.GetComponent<Rigidbody>();
         CalibrateRigidbody(prevRB, armNodeMass, armNodeDrag, armNodeAngularDrag);
@@ -94,13 +95,9 @@ public class PlayerArm : MonoBehaviour
         if (Input.GetKeyDown(deployArmKey))
         {
             if (isDeployed)
-            {
-                targetNode.SetActive(false);
-            }
+                RetractArm();
             else
-            {
-                targetNode.SetActive(true);
-            }
+                DeployArm();
             isDeployed = !isDeployed;
         }
     }
@@ -110,6 +107,31 @@ public class PlayerArm : MonoBehaviour
         for (int i = 0; i <= armSegmentCount; i++)
             lineRenderer.SetPosition(i, armNodes[i].transform.position);
         lineRenderer.BakeMesh(meshFilter.mesh, true);
+    }
+
+    private void DeployArm()
+    {
+        float armSegmentLength = armLength / armSegmentCount;
+        for (int i = 1; i <= armSegmentCount; i++)
+            CalibrateJointLimit(armNodes[i].gameObject, armSegmentLength);
+        targetNode.SetActive(true);
+    }
+
+    public void RetractArm()
+    {
+        targetNode.SetActive(false);
+        for (int i = 1; i <= armSegmentCount; i++)
+            CalibrateJointLimit(armNodes[i].gameObject, 0f);
+    }
+
+    // FOR IF ARM GETS STUCK (maybe just break it instead?)
+    public void BreakArm()
+    {
+        SphereCollider collider = null;
+        for (int i = 1; i <= armSegmentCount; i++)
+            collider = armNodes[i].gameObject.GetComponent<SphereCollider>();
+        // TODO: dont feel like solving this rn - just design better levels
+        // maybe when closing a door see if it is on a arm; and call retract arm in that case - wait until retract arm is done to close?
     }
 
     private void ConnectJoint(GameObject node, Rigidbody connectedRigidbody)
