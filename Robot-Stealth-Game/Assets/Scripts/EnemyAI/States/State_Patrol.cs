@@ -19,6 +19,7 @@ public class State_Patrol : IState
     private Coroutine waitCoroutine;
     private bool busy = false;
     private float rotationSpeed;
+    public bool singleWaypointIsDone = false; // true iff there is only 1 waypoint and it has been visited
 
     public State_Patrol(NavMeshAgent navMeshAgent, Waypoint[] waypoints, float patrolSpeed, MonoBehaviour parent)
     {
@@ -36,8 +37,10 @@ public class State_Patrol : IState
         initialSpeed = navMeshAgent.speed;
         navMeshAgent.speed = patrolSpeed;
         busy = false;
+        singleWaypointIsDone = false;
 
         TargetNearestWaypoint();
+        navMeshAgent.SetDestination(waypoints[waypointIndex].waypointPosition);
     }
 
     private void TargetNearestWaypoint()
@@ -59,6 +62,9 @@ public class State_Patrol : IState
 
     public void Tick()
     {
+        if (navMeshAgent.pathPending)
+            return;
+
         if (navMeshAgent.remainingDistance > 0.1f)
             return;
 
@@ -91,6 +97,9 @@ public class State_Patrol : IState
         // We now wait for the designated pause time
         yield return new WaitForSeconds(waypoints[waypointIndex].pauseTime);
 
+        // special case of only 1 waypoint:
+        if (waypoints.Length == 1)
+            singleWaypointIsDone = true;
         // We have completed all tasks, we now move on
         NextWaypoint();
         busy = false;
@@ -109,6 +118,7 @@ public class State_Patrol : IState
         navMeshAgent.speed = initialSpeed;
         navMeshAgent.enabled = false;
         busy = false;
+        singleWaypointIsDone = false;
 
         if (waitCoroutine != null)
             parent.StopCoroutine(waitCoroutine);

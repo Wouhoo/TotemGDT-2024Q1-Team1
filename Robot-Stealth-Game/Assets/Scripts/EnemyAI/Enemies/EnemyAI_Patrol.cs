@@ -39,6 +39,7 @@ public class EnemyAI_Patrol : EnemyAI
         sensorSystem = GetComponent<EnemySensorManager>();
 
         // STATES
+        var idle = new State_Idle();
         var patrol = new State_Patrol(navMeshAgent, waypoints, patrolSpeed, this);
         var reset = new State_Look(this, 80f, navMeshAgent.angularSpeed);
         var inquire = new State_Inquire(sensorSystem, navMeshAgent, inquireSpeed, memoryTime, attackReach / 2, tickRate);
@@ -46,6 +47,10 @@ public class EnemyAI_Patrol : EnemyAI
         var attack = new EnemyState_Wait(5f);
 
         // TRANSITIONS
+        At(idle, inquire, InquireStart());
+        At(idle, pursue, PersueStart());
+
+        At(patrol, idle, SingleWaypointDone());
         At(patrol, inquire, InquireStart());
         At(patrol, pursue, PersueStart());
 
@@ -66,6 +71,9 @@ public class EnemyAI_Patrol : EnemyAI
         stateMachine.SetState(patrol);
 
         // CONDITIONS
+
+        Func<bool> SingleWaypointDone() => () => patrol.singleWaypointIsDone;
+
         Func<bool> ResetDone() => () => reset.IsDone();
 
         Func<bool> InquireStart() => () => !sensorSystem.targetVisited;

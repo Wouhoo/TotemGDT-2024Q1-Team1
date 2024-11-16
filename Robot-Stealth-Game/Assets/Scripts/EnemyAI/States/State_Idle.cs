@@ -3,14 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyState_Idle : IState
+public class State_Idle : IState
 {
-    private readonly NavMeshAgent navMeshAgent;
-    private readonly float waitTime;
-
-    private float deadLine;
-
-    public EnemyState_Idle()
+    public State_Idle()
     {
     }
 
@@ -26,10 +21,5 @@ public class EnemyState_Idle : IState
     public void OnExit()
     {
         Debug.Log("Idle : Exit");
-    }
-
-    public bool IsDone()
-    {
-        return Time.time >= deadLine;
     }
 }
