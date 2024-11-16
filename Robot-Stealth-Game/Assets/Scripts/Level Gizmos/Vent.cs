@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
 public class Vent : TriggerableObject
 {
     GameObject playerArm;
@@ -66,3 +67,4 @@ public class Vent : TriggerableObject
         ventMaterial.color = new Color(ventMaterial.color.r, ventMaterial.color.g, ventMaterial.color.b, alpha);
     }
 }
+*/

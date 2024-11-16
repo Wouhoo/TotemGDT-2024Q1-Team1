@@ -3,16 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Lever : Trigger, IPointerClickHandler
+/*
+
+public class Lever : SignalEmitter
 {
-    LayerMask playerMask;
-    public List<TriggerableObject> signalReceivers;
-
-    private void Start()
-    {
-        playerMask = LayerMask.GetMask("Player");
-    }
-
     void EmitSignal()
     {
         Debug.Log("lol");
@@ -39,3 +33,5 @@ public class Lever : Trigger, IPointerClickHandler
         }
     }
 }
+
+*/

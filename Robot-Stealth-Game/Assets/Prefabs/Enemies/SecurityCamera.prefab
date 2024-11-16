@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 100622284929281697}
   - component: {fileID: 8542693245396547236}
   - component: {fileID: 8532580042157764509}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SecurityCamera
   m_TagString: Enemy
   m_Icon: {fileID: 0}
