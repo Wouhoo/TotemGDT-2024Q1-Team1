@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Movement_Controller : MonoBehaviour
 {
-    [SerializeField] float speed = 10f;
-    
+    [SerializeField] public float speed = 10f;
+
     Rigidbody rb;
     Vector3 direction;
 
@@ -19,7 +19,7 @@ public class Movement_Controller : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        direction = new Vector3(Input.GetAxis("Horizontal"),0, Input.GetAxis("Vertical")).normalized;
+        direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
         move(direction);
     }
 
