@@ -5,26 +5,34 @@ using UnityEngine;
 
 public class Movement_Controller : MonoBehaviour
 {
-    [SerializeField] public float speed = 10f;
+    public Rigidbody rb;
+    [SerializeField] public float defaultMaxSpeed = 10f;
+    [SerializeField] public float movementAcceleration = 10f;
+    public float speed;
+    public float acceleration;
 
-    Rigidbody rb;
-    Vector3 direction;
-
-    // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        ResetMaxSpeed();
+        rb.maxLinearVelocity = defaultMaxSpeed;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
-        direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-        move(direction);
+        Vector3 direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+        // apply walking acceleration
+        rb.AddForce(direction * acceleration, ForceMode.Acceleration);
+        speed = rb.velocity.magnitude;
     }
 
-    private void move(Vector3 direction)
+    public void SetMovement(float friction, float newMaxSpeed)
     {
-        transform.Translate(direction * speed * Time.deltaTime);
+        rb.maxLinearVelocity = newMaxSpeed;
+        acceleration = movementAcceleration * friction + 10f;
+    }
+
+    public void ResetMaxSpeed()
+    {
+        SetMovement(0.5f, defaultMaxSpeed);
     }
 }

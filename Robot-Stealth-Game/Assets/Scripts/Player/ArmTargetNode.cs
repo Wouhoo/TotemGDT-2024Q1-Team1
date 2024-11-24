@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class ArmTargetNode : MonoBehaviour
 {
-    public KeyCode deployArmKey = KeyCode.Mouse0;
+    public KeyCode interactKey = KeyCode.Mouse0;
     // InputAction interactAction;
     public float shoulderHeight = 1f;
     public float groundHeight = 0.2f;
@@ -29,7 +29,7 @@ public class ArmTargetNode : MonoBehaviour
         target.y = targetYOffset;
         transform.position = target;
 
-        if (Input.GetKeyDown(deployArmKey))
+        if (Input.GetKeyDown(interactKey))
         {
             // if by some special object do this stuff ...
             // else we gonna make some noise!!!!
@@ -37,7 +37,7 @@ public class ArmTargetNode : MonoBehaviour
             MakeNoise();
             return;
         }
-        if (Input.GetKeyUp(deployArmKey))
+        if (Input.GetKeyUp(interactKey))
         {
             targetYOffset = shoulderHeight;
             return;
