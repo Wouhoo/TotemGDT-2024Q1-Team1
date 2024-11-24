@@ -17,7 +17,7 @@ public class Goal : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // When the player touches the goal: finish the level
-        if(other.gameObject.name == "Player")
+        if(other.gameObject.name == "PlayerBody")
         {
             endLevel.CompleteLevelVictory();
         }

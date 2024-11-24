@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 5d02ca84595434a40961041bdef96d9b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - hiddenTheme: {fileID: 8300000, guid: c2aaf37d52bac2149aaaac6681db8544, type: 3}
+  - chaseTheme: {fileID: 8300000, guid: 4aa8fde250298f14680b5bf4f0fcb27d, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
