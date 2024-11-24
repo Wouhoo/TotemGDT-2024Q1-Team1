@@ -361,7 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9950f9eb0d964a46942cb789f9440f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deployArmKey: 323
+  interactKey: 323
   shoulderHeight: 1.5
   groundHeight: 0.1
 --- !u!153 &1661236460895963140
@@ -668,13 +668,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bec02c81ad500564090b3570e4e5dbb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  armLength: 7.5
+  armLength: 8
   armMassDensity: 10
-  armSegmentDensity: 5
-  armDrag: 10
+  armSegmentDensity: 4
+  armDrag: 9
   armNodeAngularDrag: 3
   armNodeSpringConstant: 500
-  armNodeDampingConstant: 100
+  armNodeDampingConstant: 90
   targetNode: {fileID: 2574909695873133751}
   handNode: {fileID: 2500375934045415049}
   armNodePrefab: {fileID: 3276446104135569729, guid: 3b94fb17abc900247b3e3b3b392ceeda, type: 3}

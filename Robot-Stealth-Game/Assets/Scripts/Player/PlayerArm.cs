@@ -105,7 +105,7 @@ public class PlayerArm : MonoBehaviour
     private void UpdateLineRenderer()
     {
         for (int i = 0; i <= armSegmentCount; i++)
-            lineRenderer.SetPosition(i, armNodes[i].transform.position);
+            lineRenderer.SetPosition(i, armNodes[i].transform.position - transform.position);
         lineRenderer.BakeMesh(meshFilter.mesh, true);
     }
 
