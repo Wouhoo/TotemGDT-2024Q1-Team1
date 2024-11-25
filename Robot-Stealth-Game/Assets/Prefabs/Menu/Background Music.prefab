@@ -143,4 +143,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hiddenThemeIntro: {fileID: 8300000, guid: 8016d0f7caeb14e53a5d9c3503f8a890, type: 3}
   hiddenThemeLoop: {fileID: 8300000, guid: da1adf4b35038489ba2e6d90acd3b683, type: 3}
-  chaseTheme: {fileID: 8300000, guid: 4aa8fde250298f14680b5bf4f0fcb27d, type: 3}
+  chaseThemeIntro: {fileID: 8300000, guid: 43bf19255f2e648bd8940e23d6496b59, type: 3}
+  chaseThemeLoop: {fileID: 8300000, guid: 806ace4786b3247f6a0d53cae41f4b71, type: 3}

@@ -10,7 +10,8 @@ public class BGM : MonoBehaviour
 
     [SerializeField] AudioClip hiddenThemeIntro;
     [SerializeField] AudioClip hiddenThemeLoop;
-    [SerializeField] AudioClip chaseTheme;
+    [SerializeField] AudioClip chaseThemeIntro;
+    [SerializeField] AudioClip chaseThemeLoop;
 
     void Start()
     {
@@ -22,6 +23,7 @@ public class BGM : MonoBehaviour
 
     public void PlaySneakingThemeWithLoop()
     {
+        audioPlayer.loop = false;
         // Set the intro clip
         audioPlayer.clip = hiddenThemeIntro;
 
@@ -43,10 +45,31 @@ public class BGM : MonoBehaviour
 
 
     // Play the chase theme for when spotted
-    public void PlayChaseTheme()
+    // public void PlayChaseTheme()
+    // {
+    //     audioPlayer.loop = true;
+    //     audioPlayer.clip = chaseThemeIntro;
+    //     audioPlayer.Play();
+    // }
+
+    public void PlayChaseThemeWithLoop()
     {
-        audioPlayer.loop = true;
-        audioPlayer.clip = chaseTheme;
+        audioPlayer.loop = false;
+        // Set the intro clip
+        audioPlayer.clip = chaseThemeIntro;
+
+        // Play the intro clip
+        audioPlayer.Play();
+
+        // Schedule switching to the loop
+        Invoke(nameof(PlayChaseLoop), chaseThemeIntro.length);
+    }
+
+    private void PlayChaseLoop()
+    {
+        // Switch to the loop clip
+        audioPlayer.clip = chaseThemeLoop;
+        audioPlayer.loop = true; // Enable looping for the loop clip
         audioPlayer.Play();
     }
 
@@ -59,10 +82,10 @@ public class BGM : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Backslash))
         {
             if (playChase)
-                PlayChaseTheme();
+                PlayChaseThemeWithLoop();
             else
                 PlaySneakingThemeWithLoop();
-            playChase = !playChase; 
+            playChase = !playChase;
         }
     }
 }
