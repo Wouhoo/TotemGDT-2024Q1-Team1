@@ -141,5 +141,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d02ca84595434a40961041bdef96d9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hiddenTheme: {fileID: 8300000, guid: c2aaf37d52bac2149aaaac6681db8544, type: 3}
+  hiddenThemeIntro: {fileID: 8300000, guid: 8016d0f7caeb14e53a5d9c3503f8a890, type: 3}
+  hiddenThemeLoop: {fileID: 8300000, guid: da1adf4b35038489ba2e6d90acd3b683, type: 3}
   chaseTheme: {fileID: 8300000, guid: 4aa8fde250298f14680b5bf4f0fcb27d, type: 3}
