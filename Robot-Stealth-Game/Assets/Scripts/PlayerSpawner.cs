@@ -7,7 +7,7 @@ public class PlayerSpawner : MonoBehaviour
     [SerializeField] List<GameObject> entrances;
     GameObject player;
 
-    // Spawns the player in the correct spot based on the selected entrance
+    // Spawn the player in the correct spot based on the entrance selected in the main menu
     void Awake()
     {
         player = GameObject.Find("Player");

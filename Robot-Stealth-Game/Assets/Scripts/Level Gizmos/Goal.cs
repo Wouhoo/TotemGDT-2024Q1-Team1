@@ -19,7 +19,7 @@ public class Goal : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // When the player touches the goal: finish the level
+        // When the player touches the goal: finish the level & save level time in the (abused) volume manager
         if(other.gameObject.name == "PlayerBody")
         {
             endLevel.CompleteLevelVictory();
