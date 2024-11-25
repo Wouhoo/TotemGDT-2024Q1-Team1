@@ -68,6 +68,13 @@ public class State_Patrol : IState
         if (navMeshAgent.remainingDistance > 0.1f)
             return;
 
+        // catch stuck errors:
+        if (0.15f < Vector3.Distance(parent.transform.position, waypoints[waypointIndex].waypointPosition))
+        {
+            TargetNearestWaypoint();
+            return;
+        }
+
         // Else we arrive at the waypoint; we are now busy until we have done all tasks here
         if (!busy)
         {
