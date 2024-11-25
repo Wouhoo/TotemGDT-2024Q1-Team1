@@ -10,19 +10,20 @@ using UnityEditor;
 public class MenuManager : MonoBehaviour
 {
     [SerializeField] GameObject helpScreen;
+    [SerializeField] GameObject levelSelectScreen;
     [SerializeField] AudioClip buttonClickSFX;
     private AudioSource sfxPlayer;
 
     void Start()
     {
         sfxPlayer = GetComponent<AudioSource>();
+        sfxPlayer.volume = VolumeManager.Instance.sfxVolume;
     }
 
     public void StartGame()
     {
-        // Load the first level. MAKE SURE THIS HAS BUILD INDEX 1 IN THE BUILD SETTINGS.
         sfxPlayer.PlayOneShot(buttonClickSFX);
-        SceneManager.LoadScene(1);
+        levelSelectScreen.SetActive(true);
     }
 
     public void QuitGame()
@@ -47,5 +48,19 @@ public class MenuManager : MonoBehaviour
         sfxPlayer.PlayOneShot(buttonClickSFX);
         Time.timeScale = 1;
         helpScreen.SetActive(false);
+    }
+
+    public void LeaveLevelSelect()
+    {
+        sfxPlayer.PlayOneShot(buttonClickSFX);
+        levelSelectScreen.SetActive(false);
+    }
+
+    public void LoadLevel(int level)
+    {
+        // Load the (first) level with the appropriate entrance location
+        sfxPlayer.PlayOneShot(buttonClickSFX);
+        VolumeManager.Instance.levelNr = level; // Yes, I know know I should rename VolumeManager if I use it like this, shut up
+        SceneManager.LoadScene(1); // Make sure the (first) level has index 1 in the build settings !!!
     }
 }

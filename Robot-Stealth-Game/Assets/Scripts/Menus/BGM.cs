@@ -11,6 +11,7 @@ public class BGM : MonoBehaviour
     void Start()
     {
         audioPlayer = GetComponent<AudioSource>();
+        audioPlayer.volume = VolumeManager.Instance.musicVolume;
         PlayHiddenTheme();
     }
 

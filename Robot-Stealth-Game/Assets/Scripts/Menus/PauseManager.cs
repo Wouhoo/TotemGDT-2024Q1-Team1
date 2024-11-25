@@ -18,6 +18,7 @@ public class PauseManager : MonoBehaviour
     private void Start()
     {
         sfxPlayer = GetComponent<AudioSource>();
+        sfxPlayer.volume = VolumeManager.Instance.sfxVolume;
     }
 
     private void Update()
