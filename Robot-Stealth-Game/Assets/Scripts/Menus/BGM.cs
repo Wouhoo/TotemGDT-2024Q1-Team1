@@ -4,27 +4,48 @@ using UnityEngine;
 
 public class BGM : MonoBehaviour
 {
+    // the themes have an intro part and a loop part, so I need 2 audio players
     private AudioSource audioPlayer;
-    [SerializeField] AudioClip hiddenTheme;
+    //[SerializeField] AudioSource audioIntroPlayer;
+
+    [SerializeField] AudioClip hiddenThemeIntro;
+    [SerializeField] AudioClip hiddenThemeLoop;
     [SerializeField] AudioClip chaseTheme;
 
     void Start()
     {
         audioPlayer = GetComponent<AudioSource>();
         audioPlayer.volume = VolumeManager.Instance.musicVolume;
-        PlayHiddenTheme();
+        PlaySneakingThemeWithLoop();
     }
 
-    // Play the "calm" music for when hidden
-    public void PlayHiddenTheme()
+
+    public void PlaySneakingThemeWithLoop()
     {
-        audioPlayer.clip = hiddenTheme;
+        // Set the intro clip
+        audioPlayer.clip = hiddenThemeIntro;
+
+        // Play the intro clip
+        audioPlayer.Play();
+
+        // Schedule switching to the loop
+        Invoke(nameof(PlaySneakingLoop), hiddenThemeIntro.length);
+    }
+
+    private void PlaySneakingLoop()
+    {
+        // Switch to the loop clip
+        audioPlayer.clip = hiddenThemeLoop;
+        audioPlayer.loop = true; // Enable looping for the loop clip
         audioPlayer.Play();
     }
+
+
 
     // Play the chase theme for when spotted
     public void PlayChaseTheme()
     {
+        audioPlayer.loop = true;
         audioPlayer.clip = chaseTheme;
         audioPlayer.Play();
     }
@@ -40,7 +61,7 @@ public class BGM : MonoBehaviour
             if (playChase)
                 PlayChaseTheme();
             else
-                PlayHiddenTheme();
+                PlaySneakingThemeWithLoop();
             playChase = !playChase; 
         }
     }
