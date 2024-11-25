@@ -43,15 +43,6 @@ public class BGM : MonoBehaviour
     }
 
 
-
-    // Play the chase theme for when spotted
-    // public void PlayChaseTheme()
-    // {
-    //     audioPlayer.loop = true;
-    //     audioPlayer.clip = chaseThemeIntro;
-    //     audioPlayer.Play();
-    // }
-
     public void PlayChaseThemeWithLoop()
     {
         audioPlayer.loop = false;
