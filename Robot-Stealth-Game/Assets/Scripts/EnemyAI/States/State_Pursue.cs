@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 public class State_Pursue : IState
 {
@@ -14,6 +15,10 @@ public class State_Pursue : IState
 
     private float initialSpeed;
     private float memoryTimer = 0f;
+
+    //just a quick way to get the music switching when the player is spotted
+    //I know this is not the place for it but we got 2 days so yeah - Lars
+    public static event Action OnPlayerSpotted;
 
     public State_Pursue(EnemySensorManager sensorSystem, NavMeshAgent navMeshAgent, float pursueSpeed, float memoryTime, float minDist, float tickRate)
     {
@@ -31,6 +36,7 @@ public class State_Pursue : IState
         navMeshAgent.enabled = true;
         initialSpeed = navMeshAgent.speed;
         navMeshAgent.speed = pursueSpeed;
+        OnPlayerSpotted?.Invoke();
     }
 
     public void Tick()

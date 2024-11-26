@@ -6,12 +6,27 @@ public class BGM : MonoBehaviour
 {
     // the themes have an intro part and a loop part, so I need 2 audio players
     private AudioSource audioPlayer;
+
+    private bool player_hidden = true;
     //[SerializeField] AudioSource audioIntroPlayer;
 
     [SerializeField] AudioClip hiddenThemeIntro;
     [SerializeField] AudioClip hiddenThemeLoop;
     [SerializeField] AudioClip chaseThemeIntro;
     [SerializeField] AudioClip chaseThemeLoop;
+
+    void OnEnable()
+    {
+        // Subscribe to the PlayerSpotted event
+        State_Pursue.OnPlayerSpotted += evPlayerSpotted;
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribe to avoid memory leaks
+        State_Pursue.OnPlayerSpotted -= evPlayerSpotted;
+    }
+
 
     void Start()
     {
@@ -43,7 +58,7 @@ public class BGM : MonoBehaviour
     }
 
 
-    public void PlayChaseThemeWithLoop()
+    public void PlayChaseThemeThemeWithLoop()
     {
         audioPlayer.loop = false;
         // Set the intro clip
@@ -53,10 +68,10 @@ public class BGM : MonoBehaviour
         audioPlayer.Play();
 
         // Schedule switching to the loop
-        Invoke(nameof(PlayChaseLoop), chaseThemeIntro.length);
+        Invoke(nameof(PlayChaseThemeLoop), chaseThemeIntro.length);
     }
 
-    private void PlayChaseLoop()
+    private void PlayChaseThemeLoop()
     {
         // Switch to the loop clip
         audioPlayer.clip = chaseThemeLoop;
@@ -64,19 +79,30 @@ public class BGM : MonoBehaviour
         audioPlayer.Play();
     }
 
+
+    public void evPlayerSpotted()
+    {
+
+        if (player_hidden)
+        {
+            player_hidden = false;
+            PlayChaseThemeThemeWithLoop();
+        }
+    }
+
     // DEBUG - Switch between themes by pressing backslash
     // In the actual theme, the chase theme should start playing when *any* enemy spots the player,
     // and the hidden theme should come back when *all* enemies have lost sight of the player.
-    bool playChase = true;
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Backslash))
         {
-            if (playChase)
-                PlayChaseThemeWithLoop();
+            if (player_hidden)
+                PlayChaseThemeThemeWithLoop();
             else
                 PlaySneakingThemeWithLoop();
-            playChase = !playChase;
+            player_hidden = !player_hidden;
         }
     }
 }
