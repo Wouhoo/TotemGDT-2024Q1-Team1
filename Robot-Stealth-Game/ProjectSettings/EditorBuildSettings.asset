@@ -9,13 +9,16 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 04bf8feb961a50641b58bc4b9a71ad03
   - enabled: 1
-    path: Assets/Scenes/Lvl - Bait & Switch.unity
-    guid: d5572364ef36e4a4982e3bac6820e91a
-  - enabled: 1
-    path: Assets/Scenes/Lvl - Doors & Buttons.unity
-    guid: a94ce1d024642294b868d74ad553e5c0
+    path: Assets/Scenes/THE Level.unity
+    guid: 8e188f1a51c0a064c88f0a7cbfdc0c39
   - enabled: 1
     path: Assets/Scenes/EndScene.unity
     guid: 52f09ea419dc4bd49bf89bb2a5a9535b
+  - enabled: 0
+    path: Assets/Scenes/Lvl - Bait & Switch.unity
+    guid: d5572364ef36e4a4982e3bac6820e91a
+  - enabled: 0
+    path: Assets/Scenes/Lvl - Doors & Buttons.unity
+    guid: a94ce1d024642294b868d74ad553e5c0
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 2b6ed6750b2068d43a7ef5f9306fc45c, type: 2}
