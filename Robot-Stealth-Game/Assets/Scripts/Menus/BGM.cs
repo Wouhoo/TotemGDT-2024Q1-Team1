@@ -7,7 +7,10 @@ public class BGM : MonoBehaviour
     // the themes have an intro part and a loop part, so I need 2 audio players
     private AudioSource audioPlayer;
 
+    //is the hidden theme playing?
     private bool player_hidden = true;
+    //flag used to override sheduled loop playing
+    private string currentTheme; // Tracks the current theme ("sneak" or "chase" or "menu" - given I will make a menu theme lolol)
     //[SerializeField] AudioSource audioIntroPlayer;
 
     [SerializeField] AudioClip hiddenThemeIntro;
@@ -19,12 +22,14 @@ public class BGM : MonoBehaviour
     {
         // Subscribe to the PlayerSpotted event
         State_Pursue.OnPlayerSpotted += evPlayerSpotted;
+        State_Pursue.OnLostPlayer += evPlayerLost;
     }
 
     void OnDisable()
     {
         // Unsubscribe to avoid memory leaks
         State_Pursue.OnPlayerSpotted -= evPlayerSpotted;
+        State_Pursue.OnLostPlayer -= evPlayerLost;
     }
 
 
@@ -38,13 +43,15 @@ public class BGM : MonoBehaviour
 
     public void PlaySneakingThemeWithLoop()
     {
+        if (currentTheme == "sneak") return; // Avoid re-triggering
+        CancelInvoke(nameof(PlayChaseThemeLoop)); //cancel the loop invoke
+        audioPlayer.Stop();
         audioPlayer.loop = false;
         // Set the intro clip
         audioPlayer.clip = hiddenThemeIntro;
-
+        currentTheme = "sneak";
         // Play the intro clip
         audioPlayer.Play();
-
         // Schedule switching to the loop
         Invoke(nameof(PlaySneakingLoop), hiddenThemeIntro.length);
     }
@@ -58,12 +65,16 @@ public class BGM : MonoBehaviour
     }
 
 
-    public void PlayChaseThemeThemeWithLoop()
+    public void PlayChaseThemeWithLoop()
     {
+        if (currentTheme == "chase") return; // Avoid re-triggering
+        CancelInvoke(nameof(PlaySneakingLoop)); //cancel the loop invoke
+        //only used for hidden theme, chase theme can't be overridden
+        audioPlayer.Stop();
         audioPlayer.loop = false;
         // Set the intro clip
         audioPlayer.clip = chaseThemeIntro;
-
+        currentTheme = "chase";
         // Play the intro clip
         audioPlayer.Play();
 
@@ -86,8 +97,14 @@ public class BGM : MonoBehaviour
         if (player_hidden)
         {
             player_hidden = false;
-            PlayChaseThemeThemeWithLoop();
+            PlayChaseThemeWithLoop();
         }
+    }
+
+    public void evPlayerLost()
+    {
+        player_hidden = true;
+        PlaySneakingThemeWithLoop();
     }
 
     // DEBUG - Switch between themes by pressing backslash
@@ -99,7 +116,7 @@ public class BGM : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Backslash))
         {
             if (player_hidden)
-                PlayChaseThemeThemeWithLoop();
+                PlayChaseThemeWithLoop();
             else
                 PlaySneakingThemeWithLoop();
             player_hidden = !player_hidden;

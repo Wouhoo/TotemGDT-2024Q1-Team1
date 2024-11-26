@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using System;
 
 public class EnemyState_Chase : IState
 {
@@ -11,9 +10,6 @@ public class EnemyState_Chase : IState
 
     private float initialSpeed;
 
-    //just a quick way to get the music switching when the player is spotted
-    //I know this is not the place for it but we got 2 days so yeah - Lars
-    public static event Action OnPlayerSpotted;
 
     // Method enemies call when they spot the player
 
@@ -29,7 +25,6 @@ public class EnemyState_Chase : IState
         navMeshAgent.enabled = true;
         initialSpeed = navMeshAgent.speed;
         navMeshAgent.speed = 3.5f;
-        OnPlayerSpotted?.Invoke();
     }
 
     public void Tick()

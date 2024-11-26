@@ -20,6 +20,9 @@ public class State_Pursue : IState
     //I know this is not the place for it but we got 2 days so yeah - Lars
     public static event Action OnPlayerSpotted;
 
+    //event for when we lost the player
+    public static event Action OnLostPlayer;
+
     public State_Pursue(EnemySensorManager sensorSystem, NavMeshAgent navMeshAgent, float pursueSpeed, float memoryTime, float minDist, float tickRate)
     {
         this.sensorSystem = sensorSystem;
@@ -66,6 +69,7 @@ public class State_Pursue : IState
         {
             // We leave this state via removing the target as nessesary to visit (Note we can also leave this state by moving to attack)
             sensorSystem.targetVisited = true;
+            OnLostPlayer?.Invoke();
             return true;
         }
         return false;
