@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class BGM : MonoBehaviour
 {
-    // the themes have an intro part and a loop part, so I need 2 audio players
     private AudioSource audioPlayer;
 
     //is the hidden theme playing?
     private bool player_hidden = true;
+    //hack alert
+    private int chasing_enemies = 0;
     //flag used to override sheduled loop playing
     private string currentTheme; // Tracks the current theme ("sneak" or "chase" or "menu" - given I will make a menu theme lolol)
     //[SerializeField] AudioSource audioIntroPlayer;
@@ -17,6 +18,9 @@ public class BGM : MonoBehaviour
     [SerializeField] AudioClip hiddenThemeLoop;
     [SerializeField] AudioClip chaseThemeIntro;
     [SerializeField] AudioClip chaseThemeLoop;
+
+    //I know it is supposed to come from an enemy but the way it is set up this is way easier
+    [SerializeField] AudioClip spottedSFX;
 
     void OnEnable()
     {
@@ -93,7 +97,7 @@ public class BGM : MonoBehaviour
 
     public void evPlayerSpotted()
     {
-
+        chasing_enemies++;
         if (player_hidden)
         {
             player_hidden = false;
@@ -103,8 +107,13 @@ public class BGM : MonoBehaviour
 
     public void evPlayerLost()
     {
-        player_hidden = true;
-        PlaySneakingThemeWithLoop();
+        chasing_enemies--;
+        if (chasing_enemies <= 0)
+        {
+            chasing_enemies = 0; //failsafe
+            player_hidden = true;
+            PlaySneakingThemeWithLoop();
+        }
     }
 
     // DEBUG - Switch between themes by pressing backslash
