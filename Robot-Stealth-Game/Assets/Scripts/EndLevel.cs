@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
-using UnityEditor.SceneManagement;
-using UnityEditor.SearchService;
 using UnityEngine.SceneManagement;
 
 public class EndLevel : MonoBehaviour
@@ -13,7 +11,7 @@ public class EndLevel : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI victoryText;
     [SerializeField] TextMeshProUGUI gameOverText;
-    [SerializeField] SceneAsset nextLevel;
+    [SerializeField] string nextLevelName;
     private GameObject player;
     private IEnumerator coroutine;
     private bool levelFinished = false;
@@ -61,7 +59,7 @@ public class EndLevel : MonoBehaviour
 
         // Reload scene (defeat) or load next level (victory)
         if(victorious)
-            SceneManager.LoadScene(nextLevel.name);
+            SceneManager.LoadScene(nextLevelName);
         else
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 

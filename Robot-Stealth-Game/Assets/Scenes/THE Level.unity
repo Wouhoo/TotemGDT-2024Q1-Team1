@@ -13504,6 +13504,10 @@ PrefabInstance:
       propertyPath: gameOverText
       value: 
       objectReference: {fileID: 1371537280166131062}
+    - target: {fileID: 1042783865555447029, guid: 2cdb2226883400941bfe07f4132f0fc8, type: 3}
+      propertyPath: nextLevelName
+      value: EndScene
+      objectReference: {fileID: 0}
     - target: {fileID: 1636519136895783886, guid: 2cdb2226883400941bfe07f4132f0fc8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

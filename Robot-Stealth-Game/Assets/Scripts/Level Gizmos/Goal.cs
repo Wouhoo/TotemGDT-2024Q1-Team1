@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
-using UnityEditor.SearchService;
 using UnityEngine;
 
 public class Goal : MonoBehaviour
