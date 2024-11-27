@@ -47,6 +47,6 @@ public class SensorManager : MonoBehaviour
         if (targets.SetEquals(oldTargets))
             return;
         foreach (EnemySensorManager enemy in enemyManagers)
-            enemy.TransformUpdate(targets);
+            enemy.VisionUpdate();
     }
 }

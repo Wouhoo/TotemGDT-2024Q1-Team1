@@ -175,6 +175,7 @@ MonoBehaviour:
   targetTransform: {fileID: 0}
   targetVector: {x: 0, y: 0, z: 0}
   targetVisited: 1
+  visionSensors: []
 --- !u!114 &3704690935989897149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,7 +226,7 @@ Light:
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
-    m_Bias: 0.05
+    m_Bias: 0
     m_NormalBias: 0.4
     m_NearPlane: 0.1
     m_CullingMatrixOverride:

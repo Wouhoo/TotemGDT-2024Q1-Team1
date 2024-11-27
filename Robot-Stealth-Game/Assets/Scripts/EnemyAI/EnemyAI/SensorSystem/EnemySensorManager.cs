@@ -13,11 +13,24 @@ public class EnemySensorManager : MonoBehaviour
     [HideInInspector] public Transform targetTransform = null; // this is for pursuing
     [HideInInspector] public Vector3 targetVector; // this is for investigating
     [HideInInspector] public bool targetVisited = true;
+    public List<VisionSensor> visionSensors;
+
 
     private void Start()
     {
         // Register with sensor manager
         SensorManager.Instance.enemyManagers.Add(this);
+    }
+
+    public void VisionUpdate()
+    {
+        HashSet<GameObject> targets = new HashSet<GameObject>();
+        foreach (VisionSensor sensor in visionSensors)
+        {
+            if (sensor != null)
+                targets.UnionWith(sensor.targets);
+        }
+        TransformUpdate(targets);
     }
 
     public void TransformUpdate(HashSet<GameObject> targets)

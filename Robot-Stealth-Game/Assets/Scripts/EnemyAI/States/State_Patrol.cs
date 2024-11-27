@@ -40,7 +40,6 @@ public class State_Patrol : IState
         singleWaypointIsDone = false;
 
         TargetNearestWaypoint();
-        navMeshAgent.SetDestination(waypoints[waypointIndex].waypointPosition);
     }
 
     private void TargetNearestWaypoint()
@@ -58,6 +57,7 @@ public class State_Patrol : IState
             }
         }
         waypointIndex = minTarget;
+        navMeshAgent.SetDestination(waypoints[waypointIndex].waypointPosition);
     }
 
     public void Tick()
