@@ -21,7 +21,11 @@ public class Movement_Controller : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3 direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 direction = new Vector3();
+        direction += input.x * new Vector3(1, 0, -1);
+        direction += input.z * new Vector3(1, 0, 1);
+
         if (direction.magnitude < 0.2f) // not walking
         {
             if (rb.velocity.magnitude > 1f) // apply stopping force
