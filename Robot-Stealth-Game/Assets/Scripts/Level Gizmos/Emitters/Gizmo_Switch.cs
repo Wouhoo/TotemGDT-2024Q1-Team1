@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Gizmo_Switch : SignalEmitter
 {
+    public bool initialState;
     public ConfigurableJoint joint;
     private int objectsOnButton = 0;
-    private bool isActive = false;
+    private bool isActive;
     public Material materialActive;
     public Material materialInactive;
     public MeshRenderer mr;
@@ -14,6 +15,12 @@ public class Gizmo_Switch : SignalEmitter
     private void Start()
     {
         mr.material = materialInactive;
+        isActive = initialState;
+        EmitSignal(isActive);
+        if (isActive)
+            mr.material = materialActive;
+        else
+            mr.material = materialInactive;
     }
 
     // First thing gets on the button

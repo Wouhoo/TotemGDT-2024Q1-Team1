@@ -17,9 +17,7 @@ public class PlayerGetsHit : MonoBehaviour
     {
         // When player gets caught by an enemy: do something
         // For now this is instant game over, but we may want to add health later.
-        if(collision.gameObject.tag == "Enemy")
-        {
+        if (collision.gameObject.tag == "Enemy")
             endLevel.CompleteLevelDefeat();
-        }
     }
 }

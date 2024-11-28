@@ -46,7 +46,6 @@ public class ArmTargetNode : MonoBehaviour
 
     private void MakeNoise()
     {
-        // TODO: play some sound
         Vector3 pos = transform.position;
         foreach (HearingSensor sensor in SensorManager.Instance.hearingSensors)
             sensor.SensorUpdate(pos);

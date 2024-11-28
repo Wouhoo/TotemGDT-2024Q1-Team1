@@ -147,7 +147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gizmoColor: {r: 1, g: 0, b: 0, a: 0.50980395}
   memoryTime: 5
-  patrolSpeed: 2
+  patrolSpeed: 3
   waypoints:
   - waypointPosition: {x: -8.5, y: 0, z: 9.5}
     facingAngle: 0
@@ -155,8 +155,8 @@ MonoBehaviour:
   - waypointPosition: {x: -2, y: 0, z: 9.5}
     facingAngle: 90
     pauseTime: 0
-  inquireSpeed: 3
-  pursueSpeed: 5
+  inquireSpeed: 4
+  pursueSpeed: 6
   attackReach: 0.6
 --- !u!114 &3040510541580202224
 MonoBehaviour:
@@ -250,7 +250,7 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295

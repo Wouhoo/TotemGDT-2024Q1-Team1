@@ -18,12 +18,12 @@ public class SignalReceiver : MonoBehaviour
         state = initialState;
     }
 
-    public void Signal(GameObject gameObject, bool signal)
+    public void Signal(GameObject emitter, bool signal)
     {
         if (signal)
-            activeTriggers.Add(gameObject);
+            activeTriggers.Add(emitter);
         else
-            activeTriggers.Remove(gameObject);
+            activeTriggers.Remove(emitter);
         UpdateState();
     }
 
